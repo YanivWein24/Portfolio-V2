@@ -14,6 +14,7 @@ import {
   Linkedin
 } from "lucide-react";
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
 import Text from "../../constants";
 
 const Section = styled.section.attrs({ className: "Contact" })`
@@ -47,9 +48,9 @@ const Container = styled.div.attrs({ className: "ContactContainer" })`
   position: relative;
   z-index: 1;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
-  }
+  `}
 `;
 
 const Header = styled.div.attrs({ className: "ContactHeader" })`
@@ -93,9 +94,9 @@ const Grid = styled.div.attrs({ className: "ContactGrid" })`
   gap: ${theme.spacing["2xl"]};
   align-items: start;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     grid-template-columns: 1fr;
-  }
+  `}
 `;
 
 const InfoCol = styled(motion.div).attrs({ className: "ContactInfoCol" })`
@@ -169,9 +170,9 @@ const FormRow = styled.div.attrs({ className: "FormRow" })`
   grid-template-columns: 1fr 1fr;
   gap: ${theme.spacing.lg};
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     grid-template-columns: 1fr;
-  }
+  `}
 `;
 
 const Field = styled.div.attrs({ className: "FormField" })`

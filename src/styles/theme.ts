@@ -14,17 +14,18 @@ const theme = {
     text: {
       primary: "#f0f6ff",
       secondary: "rgba(240,246,255,0.65)",
-      muted: "rgba(240,246,255,0.38)",
+      muted: "rgba(240,246,255,0.38)"
     },
     gradients: {
       hero: "linear-gradient(135deg, #050d1a 0%, #0e2a50 60%, #0e51a3 100%)",
       primary: "linear-gradient(135deg, #0e51a3 0%, #2c8bff 100%)",
       glow: "radial-gradient(ellipse at 50% 0%, rgba(44,139,255,0.18) 0%, transparent 70%)",
-      glowAccent: "radial-gradient(ellipse at 50% 50%, rgba(0,212,255,0.12) 0%, transparent 60%)",
+      glowAccent:
+        "radial-gradient(ellipse at 50% 50%, rgba(0,212,255,0.12) 0%, transparent 60%)",
       card: "linear-gradient(145deg, #0b1829 0%, #0f1f33 100%)",
       section: "linear-gradient(180deg, #050d1a 0%, #071020 100%)",
-      sectionAlt: "linear-gradient(180deg, #071020 0%, #050d1a 100%)",
-    },
+      sectionAlt: "linear-gradient(180deg, #071020 0%, #050d1a 100%)"
+    }
   },
   typography: {
     fontSizes: {
@@ -37,21 +38,21 @@ const theme = {
       "3xl": "2rem",
       "4xl": "2.75rem",
       "5xl": "3.75rem",
-      "6xl": "5rem",
+      "6xl": "5rem"
     },
     fontWeights: {
       regular: 400,
       medium: 500,
       semibold: 600,
       bold: 700,
-      extrabold: 800,
+      extrabold: 800
     },
     lineHeights: {
       tight: 1.1,
       snug: 1.3,
       normal: 1.6,
-      relaxed: 1.8,
-    },
+      relaxed: 1.8
+    }
   },
   spacing: {
     xs: "4px",
@@ -62,7 +63,7 @@ const theme = {
     "2xl": "48px",
     "3xl": "64px",
     "4xl": "96px",
-    "5xl": "128px",
+    "5xl": "128px"
   },
   breakpoints: {
     xs: "480px",
@@ -70,7 +71,7 @@ const theme = {
     md: "768px",
     lg: "1024px",
     xl: "1280px",
-    "2xl": "1440px",
+    "2xl": "1440px"
   },
   borderRadius: {
     sm: "6px",
@@ -78,7 +79,7 @@ const theme = {
     lg: "16px",
     xl: "24px",
     "2xl": "32px",
-    full: "9999px",
+    full: "9999px"
   },
   shadows: {
     sm: "0 2px 8px rgba(0,0,0,0.3)",
@@ -87,21 +88,21 @@ const theme = {
     xl: "0 16px 60px rgba(0,0,0,0.6)",
     glow: "0 0 30px rgba(44,139,255,0.25), 0 0 60px rgba(44,139,255,0.1)",
     glowStrong: "0 0 40px rgba(44,139,255,0.4), 0 0 80px rgba(44,139,255,0.15)",
-    glowAccent: "0 0 30px rgba(0,212,255,0.25)",
+    glowAccent: "0 0 30px rgba(0,212,255,0.25)"
   },
   transitions: {
     fast: "0.15s ease",
     normal: "0.3s ease",
     slow: "0.5s ease",
-    spring: "0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    spring: "0.4s cubic-bezier(0.34, 1.56, 0.64, 1)"
   },
   zIndex: {
     base: 0,
     above: 10,
     modal: 100,
     fixed: 200,
-    overlay: 300,
-  },
+    overlay: 300
+  }
 } as const;
 
 export type Theme = typeof theme;

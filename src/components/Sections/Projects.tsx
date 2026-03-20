@@ -10,6 +10,7 @@ import type { Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Github, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
 import projects from "@data/projects";
 
 const Section = styled.section.attrs({ className: "Projects" })`
@@ -45,9 +46,9 @@ const Container = styled.div.attrs({ className: "ProjectsContainer" })`
   position: relative;
   z-index: 1;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
-  }
+  `}
 `;
 
 const Header = styled.div.attrs({ className: "ProjectsHeader" })`
@@ -78,13 +79,13 @@ const Grid = styled(motion.div).attrs({ className: "ProjectsGrid" })`
   grid-template-columns: repeat(3, 1fr);
   gap: ${theme.spacing.xl};
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     grid-template-columns: repeat(2, 1fr);
-  }
+  `}
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     grid-template-columns: 1fr;
-  }
+  `}
 `;
 
 const Card = styled(motion.div).attrs({ className: "ProjectCard" })`
@@ -134,9 +135,9 @@ const ImageCarousel = styled.div.attrs({ className: "ProjectImageCarousel" })`
   background: ${theme.colors.surfaceHigh};
   flex-shrink: 0;
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     height: 180px;
-  }
+  `}
 `;
 
 const CarouselImg = styled(motion.img).attrs({ className: "CarouselImg" })`

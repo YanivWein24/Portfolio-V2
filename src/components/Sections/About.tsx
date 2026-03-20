@@ -4,10 +4,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import AnimatedNumbers from "react-animated-numbers";
-// @ts-expect-error - CommonJS interop
 const AnimatedNumbersComponent =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (AnimatedNumbers as any).default || AnimatedNumbers;
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
 import Text from "../../constants";
 
 const Section = styled.section.attrs({ className: "About" })`
@@ -39,9 +40,9 @@ const Container = styled.div.attrs({ className: "AboutContainer" })`
   margin: 0 auto;
   padding: 0 ${theme.spacing.xl};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
-  }
+  `}
 `;
 
 const SectionLabel = styled(motion.span).attrs({ className: "SectionLabel" })`
@@ -69,9 +70,9 @@ const Grid = styled.div.attrs({ className: "AboutGrid" })`
   gap: ${theme.spacing["3xl"]};
   align-items: start;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     grid-template-columns: 1fr;
-  }
+  `}
 `;
 
 const TextCol = styled(motion.div).attrs({ className: "AboutTextCol" })`

@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { Link } from "react-scroll";
 import { Github, Linkedin, Mail, ArrowUp, Heart } from "lucide-react";
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
+import SocialIconBtn from "@components/UI/SocialIconBtn";
 import Text from "../../constants";
 
 const FooterEl = styled.footer.attrs({ className: "Footer" })`
@@ -19,9 +21,9 @@ const Inner = styled.div.attrs({ className: "FooterInner" })`
   flex-direction: column;
   gap: ${theme.spacing.xl};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
-  }
+  `}
 `;
 
 const Top = styled.div.attrs({ className: "FooterTop" })`
@@ -32,7 +34,11 @@ const Top = styled.div.attrs({ className: "FooterTop" })`
   gap: ${theme.spacing.lg};
 `;
 
-const Logo = styled(Link).attrs({ className: "FooterLogo" })`
+interface ScrollLinkProps {
+  easing?: string;
+}
+
+const Logo = styled(Link).attrs({ className: "FooterLogo" })<ScrollLinkProps>`
   font-size: ${theme.typography.fontSizes.xl};
   font-weight: ${theme.typography.fontWeights.extrabold};
   background: linear-gradient(
@@ -52,12 +58,14 @@ const Nav = styled.nav.attrs({ className: "FooterNav" })`
   flex-wrap: wrap;
   gap: ${theme.spacing.xl};
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     gap: ${theme.spacing.lg};
-  }
+  `}
 `;
 
-const NavLink = styled(Link).attrs({ className: "FooterNavLink" })`
+const NavLink = styled(Link).attrs({
+  className: "FooterNavLink"
+})<ScrollLinkProps>`
   font-size: ${theme.typography.fontSizes.sm};
   color: ${theme.colors.text.muted};
   cursor: pointer;
@@ -71,29 +79,6 @@ const NavLink = styled(Link).attrs({ className: "FooterNavLink" })`
 const Socials = styled.div.attrs({ className: "FooterSocials" })`
   display: flex;
   gap: ${theme.spacing.md};
-`;
-
-const SocialLink = styled.a.attrs({ className: "FooterSocialLink" })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: ${theme.borderRadius.full};
-  border: 1px solid ${theme.colors.border};
-  color: ${theme.colors.text.muted};
-  transition: all ${theme.transitions.fast};
-
-  &:hover {
-    border-color: ${theme.colors.primary};
-    color: ${theme.colors.primaryLight};
-    background: rgba(44, 139, 255, 0.1);
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
 `;
 
 const Divider = styled.hr.attrs({ className: "FooterDivider" })`
@@ -123,7 +108,9 @@ const Copyright = styled.p.attrs({ className: "FooterCopyright" })`
   }
 `;
 
-const BackToTop = styled(Link).attrs({ className: "FooterBackToTop" })`
+const BackToTop = styled(Link).attrs({
+  className: "FooterBackToTop"
+})<ScrollLinkProps>`
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -167,25 +154,25 @@ function Footer() {
             ))}
           </Nav>
           <Socials>
-            <SocialLink
+            <SocialIconBtn
               href={Text.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
             >
               <Github />
-            </SocialLink>
-            <SocialLink
+            </SocialIconBtn>
+            <SocialIconBtn
               href={Text.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
             >
               <Linkedin />
-            </SocialLink>
-            <SocialLink href={`mailto:${Text.email}`} aria-label="Email">
+            </SocialIconBtn>
+            <SocialIconBtn href={`mailto:${Text.email}`} aria-label="Email">
               <Mail />
-            </SocialLink>
+            </SocialIconBtn>
           </Socials>
         </Top>
 

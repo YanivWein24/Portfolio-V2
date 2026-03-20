@@ -2,11 +2,15 @@ import { useState, useEffect, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-scroll";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, Linkedin, Mail, Download, Eye, X } from "lucide-react";
+import { Github, Linkedin, Mail, Download, Eye } from "lucide-react";
 import Hamburger from "./Hamburger";
 import navLinks from "@data/navLinks";
 import Resume from "@assets/Yaniv-Resume.pdf";
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
+import { ButtonLink } from "@components/UI/Button";
+import SocialIconBtn from "@components/UI/SocialIconBtn";
+import PdfViewerModal from "@components/UI/PdfViewerModal";
 import useScrollY from "@hooks/useScrollY";
 
 const socialLinks = [
@@ -63,12 +67,16 @@ const Inner = styled.div.attrs({ className: "HeaderInner" })`
   justify-content: space-between;
   gap: ${theme.spacing.lg};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
-  }
+  `}
 `;
 
-const Logo = styled(Link).attrs({ className: "Logo" })`
+interface ScrollLinkProps {
+  easing?: string;
+}
+
+const Logo = styled(Link).attrs({ className: "Logo" })<ScrollLinkProps>`
   font-size: ${theme.typography.fontSizes.xl};
   font-weight: ${theme.typography.fontWeights.extrabold};
   background: linear-gradient(
@@ -88,12 +96,12 @@ const NavLinks = styled.nav.attrs({ className: "NavLinks" })`
   align-items: center;
   gap: ${theme.spacing.md};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     display: none;
-  }
+  `}
 `;
 
-const NavLink = styled(Link).attrs({ className: "NavLink" })`
+const NavLink = styled(Link).attrs({ className: "NavLink" })<ScrollLinkProps>`
   font-size: ${theme.typography.fontSizes.sm};
   font-weight: ${theme.typography.fontWeights.medium};
   color: ${theme.colors.text.secondary};
@@ -129,57 +137,9 @@ const Actions = styled.div.attrs({ className: "HeaderActions" })`
   align-items: center;
   gap: ${theme.spacing.sm};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     display: none;
-  }
-`;
-
-const SocialBtn = styled.a.attrs({ className: "SocialBtn" })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: ${theme.borderRadius.full};
-  color: ${theme.colors.text.muted};
-  transition:
-    color ${theme.transitions.fast},
-    background ${theme.transitions.fast};
-
-  &:hover {
-    color: ${theme.colors.text.primary};
-    background: rgba(44, 139, 255, 0.12);
-  }
-
-  svg {
-    width: 17px;
-    height: 17px;
-  }
-`;
-
-const ResumeBtn = styled.a.attrs({ className: "ResumeBtn" })`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  border: 1px solid rgba(44, 139, 255, 0.5);
-  border-radius: ${theme.borderRadius.full};
-  font-size: ${theme.typography.fontSizes.sm};
-  font-weight: ${theme.typography.fontWeights.medium};
-  color: ${theme.colors.primaryLight};
-  transition: all 0.25s ease;
-  margin-left: 4px;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  &:hover {
-    background: rgba(44, 139, 255, 0.12);
-    border-color: ${theme.colors.primaryLight};
-    color: #fff;
-  }
+  `}
 `;
 
 interface HamburgerWrapperProps {
@@ -191,9 +151,9 @@ const HamburgerWrapper = styled.div.attrs({
   display: none;
   width: 44px;
   height: 44px;
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     display: block;
-  }
+  `}
 `;
 
 const FloatingHamburger = styled.div.attrs({ className: "FloatingHamburger" })`
@@ -203,9 +163,9 @@ const FloatingHamburger = styled.div.attrs({ className: "FloatingHamburger" })`
   right: ${theme.spacing.lg};
   z-index: ${theme.zIndex.overlay + 50};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     display: block;
-  }
+  `}
 `;
 
 const Overlay = styled(motion.div).attrs({ className: "MobileOverlay" })`
@@ -240,7 +200,9 @@ const MobileNavLinks = styled.nav.attrs({ className: "MobileNavLinks" })`
   margin-top: ${theme.spacing.xl};
 `;
 
-const MobileNavLink = styled(Link).attrs({ className: "MobileNavLink" })`
+const MobileNavLink = styled(Link).attrs({
+  className: "MobileNavLink"
+})<ScrollLinkProps>`
   font-size: ${theme.typography.fontSizes.xl};
   font-weight: ${theme.typography.fontWeights.semibold};
   color: ${theme.colors.text.secondary};
@@ -258,29 +220,6 @@ const MobileSocials = styled.div.attrs({ className: "MobileSocials" })`
   display: flex;
   gap: ${theme.spacing.md};
   margin-top: auto;
-`;
-
-const MobileSocialBtn = styled.a.attrs({ className: "MobileSocialBtn" })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: ${theme.borderRadius.full};
-  border: 1px solid ${theme.colors.border};
-  color: ${theme.colors.text.secondary};
-  transition: all ${theme.transitions.fast};
-
-  &:hover {
-    border-color: ${theme.colors.primary};
-    color: ${theme.colors.text.primary};
-    background: rgba(44, 139, 255, 0.1);
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
 `;
 
 const menuVariants = {
@@ -316,15 +255,6 @@ function Header() {
   const scrolled = scrollY > 60;
 
   const closeMenu = useCallback(() => setIsOpen(false), []);
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.innerWidth < 768
-  );
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -366,25 +296,28 @@ function Header() {
 
           <Actions>
             {socialLinks.map(({ href, Icon, label }) => (
-              <SocialBtn
+              <SocialIconBtn
                 key={label}
+                $variant="default"
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
               >
                 <Icon />
-              </SocialBtn>
+              </SocialIconBtn>
             ))}
-            {isMobile ? (
-              <ResumeBtn href={Resume} download="Yaniv-Weinshtein-Resume.pdf">
-                <Download /> Resume
-              </ResumeBtn>
-            ) : (
-              <ResumeBtn as="button" onClick={() => setShowPdfModal(true)}>
-                <Eye /> View CV
-              </ResumeBtn>
-            )}
+            <ButtonLink
+              $variant="cv"
+              $size="sm"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowPdfModal(true);
+              }}
+            >
+              <Eye /> View CV
+            </ButtonLink>
           </Actions>
 
           <HamburgerWrapper $visible={false} />
@@ -439,25 +372,28 @@ function Header() {
                 ))}
               </MobileNavLinks>
 
-              <ResumeBtn
+              <ButtonLink
+                $variant="cv"
+                $size="sm"
                 href={Resume}
                 download="Yaniv-Weinshtein-Resume.pdf"
                 style={{ alignSelf: "flex-start" }}
               >
                 <Download /> Resume
-              </ResumeBtn>
+              </ButtonLink>
 
               <MobileSocials>
                 {socialLinks.map(({ href, Icon, label }) => (
-                  <MobileSocialBtn
+                  <SocialIconBtn
                     key={label}
+                    $variant="mobile"
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
                   >
                     <Icon />
-                  </MobileSocialBtn>
+                  </SocialIconBtn>
                 ))}
               </MobileSocials>
             </MobileMenu>
@@ -465,124 +401,12 @@ function Header() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {showPdfModal && (
-          <>
-            <PdfOverlay
-              key="pdf-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowPdfModal(false)}
-            />
-            <PdfModal
-              key="pdf-modal"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <PdfHeader>
-                <h3>Yaniv Weinshtein - Resume</h3>
-                <CloseBtn
-                  onClick={() => setShowPdfModal(false)}
-                  aria-label="Close"
-                >
-                  <X />
-                </CloseBtn>
-              </PdfHeader>
-              <PdfIframe src={Resume} title="Resume PDF" />
-              <PdfFooter>
-                <ResumeBtn href={Resume} download="Yaniv-Weinshtein-Resume.pdf">
-                  <Download /> Download PDF
-                </ResumeBtn>
-              </PdfFooter>
-            </PdfModal>
-          </>
-        )}
-      </AnimatePresence>
+      <PdfViewerModal
+        isOpen={showPdfModal}
+        onClose={() => setShowPdfModal(false)}
+      />
     </>
   );
 }
-
-const PdfOverlay = styled(motion.div)`
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
-  z-index: ${theme.zIndex.modal};
-`;
-
-const PdfModal = styled(motion.div)`
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  width: min(900px, 92vw);
-  height: min(88vh, 1000px);
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: ${theme.borderRadius.lg};
-  z-index: ${theme.zIndex.modal + 1};
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: ${theme.shadows.xl};
-`;
-
-const PdfHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${theme.spacing.lg} ${theme.spacing.xl};
-  border-bottom: 1px solid ${theme.colors.border};
-  background: ${theme.colors.bgAlt};
-
-  h3 {
-    margin: 0;
-    font-size: ${theme.typography.fontSizes.lg};
-    font-weight: ${theme.typography.fontWeights.semibold};
-    color: ${theme.colors.text.primary};
-  }
-`;
-
-const CloseBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  color: ${theme.colors.text.secondary};
-  cursor: pointer;
-  border-radius: ${theme.borderRadius.sm};
-  transition: all ${theme.transitions.fast};
-
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: ${theme.colors.text.primary};
-  }
-`;
-
-const PdfIframe = styled.iframe`
-  flex: 1;
-  border: none;
-  width: 100%;
-  background: #fff;
-`;
-
-const PdfFooter = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: ${theme.spacing.lg};
-  border-top: 1px solid ${theme.colors.border};
-  background: ${theme.colors.bgAlt};
-`;
 
 export default Header;

@@ -1,25 +1,16 @@
 import { useRef, useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-scroll";
 import { TypeAnimation } from "react-type-animation";
-import {
-  ArrowDown,
-  Github,
-  Linkedin,
-  Mail,
-  Eye,
-  Download,
-  X
-} from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Eye, Download } from "lucide-react";
 import Profile from "@assets/media/profile.jpg";
 import Resume from "@assets/Yaniv-Resume.pdf";
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
+import { Button, ButtonLink, ButtonScrollLink } from "@components/UI/Button";
+import SocialIconBtn from "@components/UI/SocialIconBtn";
+import PdfViewerModal from "@components/UI/PdfViewerModal";
 import Text from "../../constants";
 
 const floatY = keyframes`
@@ -96,11 +87,11 @@ const Grid = styled.div.attrs({ className: "HeroGrid" })`
   align-items: center;
   gap: ${theme.spacing["3xl"]};
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     grid-template-columns: 1fr;
     text-align: center;
     padding-top: 140px;
-  }
+  `}
 `;
 
 const Content = styled(motion.div).attrs({ className: "HeroContent" })`
@@ -122,9 +113,9 @@ const Badge = styled(motion.div).attrs({ className: "HeroBadge" })`
   color: ${theme.colors.primaryLight};
   width: fit-content;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     margin: 0 auto;
-  }
+  `}
 
   &::before {
     content: "";
@@ -165,9 +156,9 @@ const TypeRow = styled(motion.div).attrs({ className: "HeroTypeRow" })`
   align-items: center;
   gap: 10px;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     justify-content: center;
-  }
+  `}
 `;
 
 const TypeCursor = styled.span.attrs({ className: "TypeCursor" })`
@@ -180,9 +171,9 @@ const Bio = styled(motion.p).attrs({ className: "HeroBio" })`
   line-height: ${theme.typography.lineHeights.relaxed};
   max-width: 540px;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     margin: 0 auto;
-  }
+  `}
 `;
 
 const CTARow = styled(motion.div).attrs({ className: "HeroCTARow" })`
@@ -191,190 +182,18 @@ const CTARow = styled(motion.div).attrs({ className: "HeroCTARow" })`
   flex-wrap: wrap;
   gap: ${theme.spacing.md};
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     justify-content: center;
-  }
-`;
-
-const PrimaryBtn = styled.button.attrs({ className: "HeroPrimaryBtn" })`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
-  background: linear-gradient(
-    135deg,
-    ${theme.colors.primary} 0%,
-    ${theme.colors.primaryDark} 100%
-  );
-  border: none;
-  border-radius: ${theme.borderRadius.full};
-  font-size: ${theme.typography.fontSizes.md};
-  font-weight: ${theme.typography.fontWeights.semibold};
-  color: #fff;
-  cursor: pointer;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-  box-shadow: 0 4px 12px rgba(44, 139, 255, 0.35);
-
-  &:hover {
-    box-shadow: 0 6px 20px rgba(44, 139, 255, 0.45);
-  }
-`;
-
-const SecondaryBtn = styled(Link).attrs({ className: "HeroSecondaryBtn" })`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px 24px;
-  border: 1px solid ${theme.colors.border};
-  border-radius: ${theme.borderRadius.full};
-  font-size: ${theme.typography.fontSizes.md};
-  font-weight: ${theme.typography.fontWeights.medium};
-  color: ${theme.colors.text.secondary};
-  cursor: pointer;
-  transition: all 0.25s ease;
-  background: none;
-  text-decoration: none;
-
-  &:hover {
-    border-color: ${theme.colors.primary};
-    color: ${theme.colors.text.primary};
-    background: rgba(44, 139, 255, 0.08);
-  }
-`;
-
-const HeroPdfOverlay = styled(motion.div)`
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
-  z-index: ${theme.zIndex.modal};
-`;
-
-const HeroPdfModal = styled(motion.div)`
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  width: min(900px, 92vw);
-  height: min(88vh, 1000px);
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: ${theme.borderRadius.lg};
-  z-index: ${theme.zIndex.modal + 1};
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: ${theme.shadows.xl};
-`;
-
-const HeroPdfHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${theme.spacing.lg} ${theme.spacing.xl};
-  border-bottom: 1px solid ${theme.colors.border};
-  background: ${theme.colors.bgAlt};
-
-  h3 {
-    margin: 0;
-    font-size: ${theme.typography.fontSizes.lg};
-    font-weight: ${theme.typography.fontWeights.semibold};
-    color: ${theme.colors.text.primary};
-  }
-`;
-
-const HeroCloseBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  color: ${theme.colors.text.secondary};
-  cursor: pointer;
-  border-radius: ${theme.borderRadius.sm};
-  transition: all ${theme.transitions.fast};
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: ${theme.colors.text.primary};
-  }
-`;
-
-const HeroPdfIframe = styled.iframe`
-  flex: 1;
-  border: none;
-  width: 100%;
-  background: #fff;
-`;
-
-const HeroPdfFooter = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${theme.spacing.md};
-  padding: ${theme.spacing.lg};
-  border-top: 1px solid ${theme.colors.border};
-  background: ${theme.colors.bgAlt};
-`;
-
-const HeroPdfDownloadBtn = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  border: 1px solid rgba(44, 139, 255, 0.5);
-  border-radius: ${theme.borderRadius.full};
-  font-size: ${theme.typography.fontSizes.sm};
-  font-weight: ${theme.typography.fontWeights.medium};
-  color: ${theme.colors.primaryLight};
-  transition: all 0.25s ease;
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-  &:hover {
-    background: rgba(44, 139, 255, 0.12);
-    color: #fff;
-  }
+  `}
 `;
 
 const SocialRow = styled(motion.div).attrs({ className: "HeroSocialRow" })`
   display: flex;
   gap: ${theme.spacing.md};
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     justify-content: center;
-  }
-`;
-
-const SocialLink = styled.a.attrs({ className: "HeroSocialLink" })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: ${theme.borderRadius.full};
-  border: 1px solid ${theme.colors.border};
-  color: ${theme.colors.text.muted};
-  transition: all ${theme.transitions.normal};
-
-  &:hover {
-    border-color: ${theme.colors.primary};
-    color: ${theme.colors.primaryLight};
-    background: rgba(44, 139, 255, 0.1);
-    transform: translateY(-2px);
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
+  `}
 `;
 
 const ImageSide = styled(motion.div).attrs({ className: "HeroImageSide" })`
@@ -383,9 +202,9 @@ const ImageSide = styled(motion.div).attrs({ className: "HeroImageSide" })`
   align-items: center;
   justify-content: center;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  ${MaxWidth.lg`
     order: -1;
-  }
+  `}
 `;
 
 const ImageFrame = styled.div.attrs({ className: "HeroImageFrame" })`
@@ -394,10 +213,10 @@ const ImageFrame = styled.div.attrs({ className: "HeroImageFrame" })`
   height: 340px;
   animation: ${floatY} 6s ease-in-out infinite;
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     width: 240px;
     height: 240px;
-  }
+  `}
 `;
 
 const RingOuter = styled.div.attrs({ className: "HeroRingOuter" })`
@@ -572,19 +391,26 @@ function Hero() {
 
             <CTARow variants={itemVariants}>
               {isMobile ? (
-                <PrimaryBtn
-                  as="a"
+                <ButtonLink
+                  $variant="primary"
+                  $size="lg"
                   href={Resume}
                   download="Yaniv-Weinshtein-Resume.pdf"
                 >
                   <Download /> Download CV
-                </PrimaryBtn>
+                </ButtonLink>
               ) : (
-                <PrimaryBtn onClick={() => setShowPdf(true)}>
+                <Button
+                  $variant="primary"
+                  $size="lg"
+                  onClick={() => setShowPdf(true)}
+                >
                   <Eye /> View CV
-                </PrimaryBtn>
+                </Button>
               )}
-              <SecondaryBtn
+              <ButtonScrollLink
+                $variant="outline"
+                $size="md"
                 to="contact"
                 smooth
                 duration={1200}
@@ -592,71 +418,33 @@ function Hero() {
                 offset={-80}
               >
                 Contact Me
-              </SecondaryBtn>
+              </ButtonScrollLink>
             </CTARow>
 
             <SocialRow variants={itemVariants}>
-              <SocialLink
+              <SocialIconBtn
                 href={Text.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
               >
                 <Github />
-              </SocialLink>
-              <SocialLink
+              </SocialIconBtn>
+              <SocialIconBtn
                 href={Text.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
               >
                 <Linkedin />
-              </SocialLink>
-              <SocialLink href={`mailto:${Text.email}`} aria-label="Email">
+              </SocialIconBtn>
+              <SocialIconBtn href={`mailto:${Text.email}`} aria-label="Email">
                 <Mail />
-              </SocialLink>
+              </SocialIconBtn>
             </SocialRow>
           </Content>
 
-          <AnimatePresence>
-            {showPdf && (
-              <>
-                <HeroPdfOverlay
-                  key="hero-pdf-overlay"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setShowPdf(false)}
-                />
-                <HeroPdfModal
-                  key="hero-pdf-modal"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <HeroPdfHeader>
-                    <h3>Yaniv Weinshtein - Resume</h3>
-                    <HeroCloseBtn
-                      onClick={() => setShowPdf(false)}
-                      aria-label="Close"
-                    >
-                      <X />
-                    </HeroCloseBtn>
-                  </HeroPdfHeader>
-                  <HeroPdfIframe src={Resume} title="Resume PDF" />
-                  <HeroPdfFooter>
-                    <HeroPdfDownloadBtn
-                      href={Resume}
-                      download="Yaniv-Weinshtein-Resume.pdf"
-                    >
-                      <Download /> Download PDF
-                    </HeroPdfDownloadBtn>
-                  </HeroPdfFooter>
-                </HeroPdfModal>
-              </>
-            )}
-          </AnimatePresence>
+          <PdfViewerModal isOpen={showPdf} onClose={() => setShowPdf(false)} />
 
           <ImageSide
             variants={imageVariants}

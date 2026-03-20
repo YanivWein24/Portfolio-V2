@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
 import skillsData from "@data/skills";
 import type { SkillSet } from "@appTypes/index";
 
@@ -38,9 +39,9 @@ const Container = styled.div.attrs({ className: "SkillsContainer" })`
   position: relative;
   z-index: 1;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
-  }
+  `}
 `;
 
 const Header = styled.div.attrs({ className: "SkillsHeader" })`
@@ -102,9 +103,9 @@ const TabBtn = styled.button.attrs({ className: "SkillsTabBtn" })<TabBtnProps>`
 const GridWrapper = styled.div.attrs({ className: "SkillsGridWrapper" })`
   min-height: 420px;
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     min-height: 360px;
-  }
+  `}
 `;
 
 const Grid = styled(motion.div).attrs({ className: "SkillsGrid" })`
@@ -112,13 +113,13 @@ const Grid = styled(motion.div).attrs({ className: "SkillsGrid" })`
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: ${theme.spacing.lg};
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: ${theme.spacing.md};
-  }
+  `}
 `;
 
-const SkillCard = styled(motion.a).attrs({ className: "SkillCard" })`
+const SkillCard = styled(motion.div).attrs({ className: "SkillCard" })`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -127,8 +128,7 @@ const SkillCard = styled(motion.a).attrs({ className: "SkillCard" })`
   background: ${theme.colors.surface};
   border: 1px solid ${theme.colors.border};
   border-radius: ${theme.borderRadius.lg};
-  cursor: pointer;
-  text-decoration: none;
+  cursor: default;
   transition:
     border-color ${theme.transitions.normal},
     transform ${theme.transitions.normal},
@@ -246,9 +246,6 @@ function Skills() {
             {skillsData[activeTab].map((skill) => (
               <SkillCard
                 key={skill.name}
-                href={skill.link}
-                target="_blank"
-                rel="noopener noreferrer"
                 style={{ "--skill-color": skill.color } as React.CSSProperties}
                 variants={cardVariants}
               >

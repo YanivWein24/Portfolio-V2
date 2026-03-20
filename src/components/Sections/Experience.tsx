@@ -16,6 +16,7 @@ import {
   ChevronDown
 } from "lucide-react";
 import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
 import timeline from "@data/timeline";
 import type { TimelineEntry } from "@appTypes/index";
 
@@ -46,9 +47,9 @@ const Container = styled.div.attrs({ className: "ExperienceContainer" })`
   position: relative;
   z-index: 1;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
-  }
+  `}
 `;
 
 const Header = styled.div.attrs({ className: "ExperienceHeader" })`
@@ -92,9 +93,9 @@ const TimelineWrap = styled.div.attrs({ className: "TimelineWrap" })`
       transparent
     );
 
-    @media (max-width: ${theme.breakpoints.sm}) {
+    ${MaxWidth.sm`
       left: 18px;
-    }
+    `}
   }
 `;
 
@@ -105,9 +106,9 @@ const EntryWrapper = styled(motion.div).attrs({
   padding-left: 68px;
   margin-bottom: ${theme.spacing.lg};
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     padding-left: 50px;
-  }
+  `}
 `;
 
 const Dot = styled.div.attrs({ className: "TimelineDot" })<{
@@ -139,11 +140,11 @@ const Dot = styled.div.attrs({ className: "TimelineDot" })<{
     color: #fff;
   }
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  ${MaxWidth.sm`
     left: 4px;
     width: 24px;
     height: 24px;
-  }
+  `}
 `;
 
 const Card = styled(motion.div).attrs({ className: "TimelineCard" })`
