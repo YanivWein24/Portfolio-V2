@@ -110,7 +110,11 @@ const Grid = styled.div.attrs({ className: "ContactGrid" })`
 const InfoCol = styled(motion.div).attrs({ className: "ContactInfoCol" })`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.lg};
+
+  ${MaxWidth.sm`
+    gap: ${theme.spacing.md};
+  `}
 `;
 
 const InfoCard = styled.div.attrs({ className: "ContactInfoCard" })`
@@ -171,6 +175,10 @@ const FormCard = styled(motion.form).attrs({ className: "ContactFormCard" })`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.lg};
+
+  ${MaxWidth.md`
+    gap: ${theme.spacing.md};
+  `}
 `;
 
 const FormRow = styled.div.attrs({ className: "FormRow" })`
@@ -180,6 +188,7 @@ const FormRow = styled.div.attrs({ className: "FormRow" })`
 
   ${MaxWidth.sm`
     grid-template-columns: 1fr;
+    gap: ${theme.spacing.md};
   `}
 `;
 
@@ -325,6 +334,37 @@ const formVariants: Variants = {
 
 type Status = "idle" | "sending" | "success" | "error";
 
+const CONTACT_LINKS = [
+  {
+    icon: Mail,
+    title: "Email",
+    value: Text.email,
+    href: `mailto:${Text.email}`
+  },
+  {
+    icon: Github,
+    title: "GitHub",
+    value: "YanivWein24",
+    href: Text.github,
+    external: true
+  },
+  {
+    icon: Linkedin,
+    title: "LinkedIn",
+    value: "yaniv-weinshtein",
+    href: Text.linkedin,
+    external: true
+  }
+];
+
+const STATUS_CONFIG: Record<
+  "success" | "error",
+  { icon: typeof CheckCircle; text: string }
+> = {
+  success: { icon: CheckCircle, text: Text.messageSent },
+  error: { icon: AlertCircle, text: Text.messageError }
+};
+
 function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<Status>("idle");
@@ -348,7 +388,10 @@ function Contact() {
         setStatus("success");
         formRef.current?.reset();
       })
-      .catch(() => setStatus("error"));
+      .catch((err) => {
+        console.error({ err });
+        setStatus("error");
+      });
   };
 
   return (
@@ -385,43 +428,27 @@ function Contact() {
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
           >
-            <InfoCard as="a" href={`mailto:${Text.email}`}>
-              <IconWrap>
-                <Mail />
-              </IconWrap>
-              <InfoText>
-                <InfoTitle>Email</InfoTitle>
-                <InfoValue>{Text.email}</InfoValue>
-              </InfoText>
-            </InfoCard>
-            <InfoCard
-              as="a"
-              href={Text.github}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <IconWrap>
-                <Github />
-              </IconWrap>
-              <InfoText>
-                <InfoTitle>GitHub</InfoTitle>
-                <InfoValue>YanivWein24</InfoValue>
-              </InfoText>
-            </InfoCard>
-            <InfoCard
-              as="a"
-              href={Text.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <IconWrap>
-                <Linkedin />
-              </IconWrap>
-              <InfoText>
-                <InfoTitle>LinkedIn</InfoTitle>
-                <InfoValue>yaniv-weinshtein</InfoValue>
-              </InfoText>
-            </InfoCard>
+            {CONTACT_LINKS.map(
+              ({ icon: Icon, title, value, href, external }) => (
+                <InfoCard
+                  key={title}
+                  as="a"
+                  href={href}
+                  {...(external && {
+                    target: "_blank",
+                    rel: "noopener noreferrer"
+                  })}
+                >
+                  <IconWrap>
+                    <Icon />
+                  </IconWrap>
+                  <InfoText>
+                    <InfoTitle>{title}</InfoTitle>
+                    <InfoValue>{value}</InfoValue>
+                  </InfoText>
+                </InfoCard>
+              )
+            )}
           </InfoCol>
 
           <FormCard
@@ -433,20 +460,20 @@ function Contact() {
           >
             <FormRow>
               <Field>
-                <Label htmlFor="user_name">Name</Label>
+                <Label htmlFor="name">Name</Label>
                 <Input
-                  id="user_name"
-                  name="user_name"
+                  id="name"
+                  name="name"
                   type="text"
                   placeholder="Your name"
                   required
                 />
               </Field>
               <Field>
-                <Label htmlFor="user_email">Email</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
-                  id="user_email"
-                  name="user_email"
+                  id="email"
+                  name="email"
                   type="email"
                   placeholder="your@email.com"
                   required
@@ -473,24 +500,20 @@ function Contact() {
               />
             </Field>
 
-            {status === "success" && (
-              <StatusMsg
-                $type="success"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <CheckCircle /> {Text.messageSent}
-              </StatusMsg>
-            )}
-            {status === "error" && (
-              <StatusMsg
-                $type="error"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <AlertCircle /> {Text.messageError}
-              </StatusMsg>
-            )}
+            {["success", "error"].includes(status) &&
+              (() => {
+                const { icon: Icon, text } =
+                  STATUS_CONFIG[status as "success" | "error"];
+                return (
+                  <StatusMsg
+                    $type={status as "success" | "error"}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <Icon /> {text}
+                  </StatusMsg>
+                );
+              })()}
 
             <SubmitBtn
               type="submit"
