@@ -67,28 +67,17 @@ const GlobalStyles = createGlobalStyle`
     box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.55);
   }
 
-  /* Fade-out shadow overlay as sections leave viewport */
-  main > section::before {
+  /* Subtle bottom vignette — fixed height so it never covers content */
+  main > section:not(:last-child)::before {
     content: '';
     position: absolute;
-    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0) 70%,
-      rgba(0, 0, 0, 0.15) 100%
-    );
+    height: 120px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.15) 100%);
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
     z-index: 1;
-  }
-
-  main > section:not(:last-child)::before {
-    opacity: 1;
   }
 
   /* Custom scrollbar */

@@ -4,6 +4,7 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Github, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import useSectionParallax from "@hooks/useSectionParallax";
+import { SectionLabel, SectionTitle } from "@styles/shared";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
 import projects from "@data/projects";
@@ -57,24 +58,6 @@ const Container = styled.div.attrs({ className: "ProjectsContainer" })`
 const Header = styled.div.attrs({ className: "ProjectsHeader" })`
   text-align: center;
   margin-bottom: ${theme.spacing["3xl"]};
-`;
-
-const SectionLabel = styled(motion.span).attrs({ className: "SectionLabel" })`
-  display: inline-block;
-  font-size: ${theme.typography.fontSizes.sm};
-  font-weight: ${theme.typography.fontWeights.semibold};
-  color: ${theme.colors.primary};
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: ${theme.spacing.md};
-`;
-
-const SectionTitle = styled(motion.h2).attrs({ className: "SectionTitle" })`
-  font-size: clamp(2rem, 4vw, ${theme.typography.fontSizes["4xl"]});
-  font-weight: ${theme.typography.fontWeights.extrabold};
-  color: ${theme.colors.text.primary};
-  letter-spacing: -1px;
-  line-height: ${theme.typography.lineHeights.tight};
 `;
 
 const Grid = styled(motion.div).attrs({ className: "ProjectsGrid" })`
