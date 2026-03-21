@@ -191,7 +191,7 @@ const DateBadge = styled.span.attrs({ className: "TimelineDateBadge" })`
   font-size: ${theme.typography.fontSizes.xs};
   color: ${theme.colors.text.muted};
   padding: 3px 10px;
-  background: rgba(var(--overlay-rgb), 0.05);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid ${theme.colors.border};
   border-radius: ${theme.borderRadius.full};
 `;
