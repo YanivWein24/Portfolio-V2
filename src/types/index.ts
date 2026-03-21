@@ -35,6 +35,5 @@ export interface SkillSet {
 export interface NavLink {
   label: string;
   to: string;
-  offset?: number;
   duration?: number;
 }

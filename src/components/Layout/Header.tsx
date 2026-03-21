@@ -3,16 +3,16 @@ import styled, { css } from "styled-components";
 import { Link } from "react-scroll";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, Linkedin, Mail, Download, Eye, Sun, Moon } from "lucide-react";
-import Hamburger from "./Hamburger";
-import navLinks from "@data/navLinks";
-import Resume from "@assets/Yaniv-Resume.pdf";
-import theme from "@styles/theme";
-import MaxWidth from "@styles/responsive";
+import type { NavLink } from "@appTypes/index";
+import useScrollY from "@hooks/useScrollY";
+import useTheme from "@hooks/useTheme";
 import { ButtonLink } from "@components/UI/Button";
 import SocialIconBtn from "@components/UI/SocialIconBtn";
 import PdfViewerModal from "@components/UI/PdfViewerModal";
-import useScrollY from "@hooks/useScrollY";
-import useTheme from "@hooks/useTheme";
+import theme from "@styles/theme";
+import MaxWidth from "@styles/responsive";
+import Resume from "@assets/Yaniv-Resume.pdf";
+import Hamburger from "./Hamburger";
 
 const socialLinks = [
   { href: "https://github.com/YanivWein24", Icon: Github, label: "GitHub" },
@@ -289,6 +289,14 @@ const menuVariants = {
   }
 };
 
+const navLinks: NavLink[] = [
+  { label: "About", to: "about" },
+  { label: "Skills", to: "skills" },
+  { label: "Experience", to: "experience" },
+  { label: "Projects", to: "projects" },
+  { label: "Contact", to: "contact" }
+];
+
 const overlayVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.25 } },
@@ -333,7 +341,6 @@ function Header() {
                 smooth
                 duration={400}
                 easing="easeInOutQuint"
-                offset={link.offset ?? -80}
                 spy
                 activeClass="active"
               >
@@ -413,7 +420,6 @@ function Header() {
                     smooth
                     duration={1200}
                     easing="easeInOutQuint"
-                    offset={link.offset ?? -80}
                     onClick={closeMenu}
                   >
                     {link.label}
