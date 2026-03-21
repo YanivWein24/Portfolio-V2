@@ -39,7 +39,7 @@ const ParallaxBg = styled(motion.div).attrs({
   inset: -20%;
   background: radial-gradient(
     ellipse at 50% 30%,
-    rgba(44, 139, 255, 0.06) 0%,
+    rgba(var(--primary-rgb), 0.06) 0%,
     transparent 60%
   );
   pointer-events: none;
@@ -123,7 +123,7 @@ const Dot = styled.div.attrs({ className: "TimelineDot" })<{
         : "linear-gradient(135deg, #7c3aed, #5b21b6)"};
   box-shadow:
     0 0 0 4px ${theme.colors.bgAlt},
-    0 0 12px rgba(44, 139, 255, 0.3);
+    0 0 12px rgba(var(--primary-rgb), 0.3);
 
   svg {
     width: 13px;
@@ -146,7 +146,7 @@ const Card = styled(motion.div).attrs({ className: "TimelineCard" })`
   transition: border-color ${theme.transitions.normal};
 
   &:hover {
-    border-color: rgba(44, 139, 255, 0.3);
+    border-color: rgba(var(--primary-rgb), 0.3);
   }
 `;
 
@@ -191,7 +191,7 @@ const DateBadge = styled.span.attrs({ className: "TimelineDateBadge" })`
   font-size: ${theme.typography.fontSizes.xs};
   color: ${theme.colors.text.muted};
   padding: 3px 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--overlay-rgb), 0.05);
   border: 1px solid ${theme.colors.border};
   border-radius: ${theme.borderRadius.full};
 `;
@@ -241,8 +241,8 @@ const TechChip = styled.span.attrs({ className: "TechChip" })`
   font-size: ${theme.typography.fontSizes.xs};
   font-weight: ${theme.typography.fontWeights.semibold};
   color: ${theme.colors.primaryLight};
-  background: rgba(44, 139, 255, 0.1);
-  border: 1px solid rgba(44, 139, 255, 0.2);
+  background: rgba(var(--primary-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
 `;
 
 const LinkBtn = styled.a.attrs({ className: "TimelineLinkBtn" })`
@@ -260,7 +260,7 @@ const LinkBtn = styled.a.attrs({ className: "TimelineLinkBtn" })`
   }
 
   &:hover {
-    color: #fff;
+    color: ${theme.colors.text.primary};
   }
 `;
 

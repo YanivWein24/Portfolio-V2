@@ -28,12 +28,12 @@ const ParallaxBg = styled(motion.div).attrs({ className: "AboutParallaxBg" })`
   background:
     radial-gradient(
       ellipse at 20% 50%,
-      rgba(44, 139, 255, 0.07) 0%,
+      rgba(var(--primary-rgb), 0.07) 0%,
       transparent 60%
     ),
     radial-gradient(
       ellipse at 80% 30%,
-      rgba(124, 58, 237, 0.06) 0%,
+      rgba(var(--accent-alt-rgb), 0.06) 0%,
       transparent 55%
     );
   pointer-events: none;
@@ -97,10 +97,10 @@ const HighlightBox = styled(motion.div).attrs({ className: "HighlightBox" })`
   padding: ${theme.spacing.xl};
   background: linear-gradient(
     135deg,
-    rgba(44, 139, 255, 0.08),
-    rgba(124, 58, 237, 0.05)
+    rgba(var(--primary-rgb), 0.08),
+    rgba(var(--accent-alt-rgb), 0.05)
   );
-  border: 1px solid rgba(44, 139, 255, 0.2);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
   border-radius: ${theme.borderRadius.lg};
   font-size: ${theme.typography.fontSizes.md};
   color: ${theme.colors.text.secondary};
@@ -161,7 +161,7 @@ const StatCard = styled(motion.div).attrs({ className: "StatCard" })`
   }
 
   &:hover {
-    border-color: rgba(44, 139, 255, 0.35);
+    border-color: rgba(var(--primary-rgb), 0.35);
     transform: translateY(-4px);
     &::before {
       opacity: 1;

@@ -1,3 +1,4 @@
+import ThemeProvider from "./context/ThemeProvider";
 import GlobalStyles from "@styles/GlobalStyles";
 import Header from "@components/Layout/Header";
 import Hero from "@components/Sections/Hero";
@@ -10,7 +11,7 @@ import Footer from "@components/Layout/Footer";
 
 function App() {
   return (
-    <>
+    <ThemeProvider>
       <GlobalStyles />
       <Header />
       <main>
@@ -22,7 +23,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </ThemeProvider>
   );
 }
 

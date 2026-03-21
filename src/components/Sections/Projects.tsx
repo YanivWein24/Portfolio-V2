@@ -28,12 +28,12 @@ const ParallaxBg = styled(motion.div).attrs({
   background:
     radial-gradient(
       ellipse at 70% 70%,
-      rgba(44, 139, 255, 0.07) 0%,
+      rgba(var(--primary-rgb), 0.07) 0%,
       transparent 55%
     ),
     radial-gradient(
       ellipse at 30% 20%,
-      rgba(124, 58, 237, 0.07) 0%,
+      rgba(var(--accent-alt-rgb), 0.07) 0%,
       transparent 50%
     );
   pointer-events: none;
@@ -89,10 +89,10 @@ const Card = styled(motion.div).attrs({ className: "ProjectCard" })`
     transform ${theme.transitions.normal};
 
   &:hover {
-    border-color: rgba(44, 139, 255, 0.35);
+    border-color: rgba(var(--primary-rgb), 0.35);
     box-shadow:
-      0 16px 48px rgba(0, 0, 0, 0.4),
-      0 0 24px rgba(44, 139, 255, 0.1);
+      0 16px 48px rgba(var(--shadow-rgb), 0.4),
+      0 0 24px rgba(var(--primary-rgb), 0.1);
     transform: translateY(-6px);
   }
 `;
@@ -204,7 +204,7 @@ const ToolChip = styled.span.attrs({ className: "ToolChip" })`
   font-size: ${theme.typography.fontSizes.xs};
   font-weight: ${theme.typography.fontWeights.semibold};
   color: ${theme.colors.text.muted};
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--overlay-rgb), 0.05);
   border: 1px solid ${theme.colors.border};
 `;
 

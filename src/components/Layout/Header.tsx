@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-scroll";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, Linkedin, Mail, Download, Eye } from "lucide-react";
+import { Github, Linkedin, Mail, Download, Eye, Sun, Moon } from "lucide-react";
 import Hamburger from "./Hamburger";
 import navLinks from "@data/navLinks";
 import Resume from "@assets/Yaniv-Resume.pdf";
@@ -12,6 +12,7 @@ import { ButtonLink } from "@components/UI/Button";
 import SocialIconBtn from "@components/UI/SocialIconBtn";
 import PdfViewerModal from "@components/UI/PdfViewerModal";
 import useScrollY from "@hooks/useScrollY";
+import useTheme from "@hooks/useTheme";
 
 const socialLinks = [
   { href: "https://github.com/YanivWein24", Icon: Github, label: "GitHub" },
@@ -44,12 +45,12 @@ const Nav = styled.header.attrs({ className: "Header" })<ScrolledProps>`
   ${({ $scrolled }) =>
     $scrolled
       ? css`
-          background: rgba(5, 13, 26, 0.88);
+          background: var(--header-bg);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           box-shadow:
-            0 1px 0 rgba(44, 139, 255, 0.15),
-            0 4px 24px rgba(0, 0, 0, 0.4);
+            0 1px 0 rgba(var(--primary-rgb), 0.15),
+            0 4px 24px rgba(var(--shadow-rgb), 0.4);
           padding: 12px 0;
         `
       : css`
@@ -89,7 +90,7 @@ const Logo = styled(Link).attrs({ className: "Logo" })<ScrollLinkProps>`
   font-weight: ${theme.typography.fontWeights.extrabold};
   background: linear-gradient(
     135deg,
-    #fff 0%,
+    var(--logo-from) 0%,
     ${theme.colors.primaryLight} 100%
   );
   -webkit-background-clip: text;
@@ -195,10 +196,36 @@ const FloatingHamburger = styled.div.attrs({ className: "FloatingHamburger" })`
   display: none;
 `;
 
+const ThemeToggle = styled.button.attrs({ className: "ThemeToggle" })`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid ${theme.colors.border};
+  background: transparent;
+  color: ${theme.colors.text.muted};
+  border-radius: ${theme.borderRadius.full};
+  cursor: pointer;
+  transition: all ${theme.transitions.fast};
+  flex-shrink: 0;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: ${theme.colors.text.primary};
+    border-color: rgba(var(--primary-rgb), 0.4);
+    background: rgba(var(--primary-rgb), 0.1);
+  }
+`;
+
 const Overlay = styled(motion.div).attrs({ className: "MobileOverlay" })`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(var(--shadow-rgb), 0.7);
   backdrop-filter: blur(4px);
   z-index: ${theme.zIndex.overlay - 1};
 `;
@@ -280,6 +307,7 @@ function Header() {
   const [showPdfModal, setShowPdfModal] = useState(false);
   const scrollY = useScrollY();
   const scrolled = scrollY > 60;
+  const { isDark, toggleTheme } = useTheme();
 
   const closeMenu = useCallback(() => setIsOpen(false), []);
 
@@ -345,6 +373,9 @@ function Header() {
             >
               <Eye /> View CV
             </ButtonLink>
+            <ThemeToggle onClick={toggleTheme} aria-label="Toggle theme">
+              {isDark ? <Sun /> : <Moon />}
+            </ThemeToggle>
           </Actions>
 
           <HamburgerWrapper $visible={isOpen}>
@@ -408,6 +439,10 @@ function Header() {
               >
                 <Download /> Resume
               </ButtonLink>
+
+              <ThemeToggle onClick={toggleTheme} aria-label="Toggle theme">
+                {isDark ? <Sun /> : <Moon />}
+              </ThemeToggle>
 
               <MobileSocials>
                 {socialLinks.map(({ href, Icon, label }) => (

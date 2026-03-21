@@ -52,7 +52,7 @@ const Logo = styled(Link).attrs({ className: "FooterLogo" })<ScrollLinkProps>`
   font-weight: ${theme.typography.fontWeights.extrabold};
   background: linear-gradient(
     135deg,
-    #fff 0%,
+    var(--logo-from) 0%,
     ${theme.colors.primaryLight} 100%
   );
   -webkit-background-clip: text;

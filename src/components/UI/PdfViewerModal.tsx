@@ -7,7 +7,7 @@ import Resume from "@assets/Yaniv-Resume.pdf";
 const Overlay = styled(motion.div).attrs({ className: "PdfOverlay" })`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(var(--shadow-rgb), 0.85);
   backdrop-filter: blur(8px);
   z-index: ${theme.zIndex.modal};
 `;
@@ -63,7 +63,7 @@ const CloseBtn = styled.button.attrs({ className: "PdfCloseBtn" })`
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--overlay-rgb), 0.1);
     color: ${theme.colors.text.primary};
   }
 `;
@@ -72,7 +72,7 @@ const Iframe = styled.iframe.attrs({ className: "PdfIframe" })`
   flex: 1;
   border: none;
   width: 100%;
-  background: #fff;
+  background: ${theme.colors.surface};
 `;
 
 const ModalFooter = styled.div.attrs({ className: "PdfModalFooter" })`
@@ -90,7 +90,7 @@ const DownloadBtn = styled.a.attrs({ className: "PdfDownloadBtn" })`
   align-items: center;
   gap: 6px;
   padding: 8px 18px;
-  border: 1px solid rgba(44, 139, 255, 0.5);
+  border: 1px solid rgba(var(--primary-rgb), 0.5);
   border-radius: ${theme.borderRadius.full};
   font-size: ${theme.typography.fontSizes.sm};
   font-weight: ${theme.typography.fontWeights.medium};
@@ -103,8 +103,8 @@ const DownloadBtn = styled.a.attrs({ className: "PdfDownloadBtn" })`
   }
 
   &:hover {
-    background: rgba(44, 139, 255, 0.12);
-    color: #fff;
+    background: rgba(var(--primary-rgb), 0.12);
+    color: ${theme.colors.text.primary};
   }
 `;
 
@@ -114,7 +114,11 @@ interface PdfViewerModalProps {
   title?: string;
 }
 
-function PdfViewerModal({ isOpen, onClose, title = "Yaniv Weinshtein - Resume" }: PdfViewerModalProps) {
+function PdfViewerModal({
+  isOpen,
+  onClose,
+  title = "Yaniv Weinshtein - Resume"
+}: PdfViewerModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (

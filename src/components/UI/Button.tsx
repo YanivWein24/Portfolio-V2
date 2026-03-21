@@ -45,9 +45,9 @@ const variantStyles = {
     );
     border: none;
     color: #fff;
-    box-shadow: 0 4px 12px rgba(44, 139, 255, 0.35);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.35);
     &:hover:not(:disabled) {
-      box-shadow: 0 6px 20px rgba(44, 139, 255, 0.5);
+      box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.5);
     }
   `,
   outline: css`
@@ -57,7 +57,7 @@ const variantStyles = {
     &:hover:not(:disabled) {
       border-color: ${theme.colors.primary};
       color: ${theme.colors.text.primary};
-      background: rgba(44, 139, 255, 0.08);
+      background: rgba(var(--primary-rgb), 0.08);
     }
   `,
   ghost: css`
@@ -66,18 +66,18 @@ const variantStyles = {
     color: ${theme.colors.text.muted};
     &:hover:not(:disabled) {
       color: ${theme.colors.text.primary};
-      background: rgba(44, 139, 255, 0.08);
+      background: rgba(var(--primary-rgb), 0.08);
     }
   `,
   cv: css`
     background: none;
-    border: 1px solid rgba(44, 139, 255, 0.5);
+    border: 1px solid rgba(var(--primary-rgb), 0.5);
     color: ${theme.colors.primaryLight};
     margin-left: 4px;
     &:hover:not(:disabled) {
-      background: rgba(44, 139, 255, 0.12);
+      background: rgba(var(--primary-rgb), 0.12);
       border-color: ${theme.colors.primaryLight};
-      color: #fff;
+      color: ${theme.colors.text.primary};
     }
   `
 };

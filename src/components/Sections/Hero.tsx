@@ -84,9 +84,9 @@ const Badge = styled(motion.div).attrs({ className: "HeroBadge" })`
   align-items: center;
   gap: 8px;
   padding: 6px 16px;
-  border: 1px solid rgba(44, 139, 255, 0.35);
+  border: 1px solid rgba(var(--primary-rgb), 0.35);
   border-radius: ${theme.borderRadius.full};
-  background: rgba(44, 139, 255, 0.08);
+  background: rgba(var(--primary-rgb), 0.08);
   font-size: ${theme.typography.fontSizes.sm};
   font-weight: ${theme.typography.fontWeights.medium};
   color: ${theme.colors.primaryLight};
@@ -208,7 +208,7 @@ const RingOuter = styled.div.attrs({ className: "HeroRingOuter" })`
   position: absolute;
   inset: -20px;
   border-radius: 50%;
-  border: 1px dashed rgba(44, 139, 255, 0.3);
+  border: 1px dashed rgba(var(--primary-rgb), 0.3);
   animation: ${rotateSlow} 20s linear infinite;
 `;
 
@@ -216,7 +216,7 @@ const RingInner = styled.div.attrs({ className: "HeroRingInner" })`
   position: absolute;
   inset: -8px;
   border-radius: 50%;
-  border: 1px solid rgba(44, 139, 255, 0.2);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
 `;
 
 const GlowCircle = styled.div.attrs({ className: "HeroGlowCircle" })`
@@ -234,7 +234,7 @@ const ProfileImg = styled.img.attrs({ className: "HeroProfileImg" })`
   border-radius: 50%;
   object-fit: cover;
   object-position: top center;
-  border: 3px solid rgba(44, 139, 255, 0.3);
+  border: 3px solid rgba(var(--primary-rgb), 0.3);
   position: relative;
   z-index: 1;
 `;
@@ -362,7 +362,7 @@ function Hero() {
           width: "900px",
           height: "600px",
           background:
-            "radial-gradient(ellipse, rgba(44,139,255,0.14) 0%, transparent 70%)"
+            "radial-gradient(ellipse, rgba(var(--primary-rgb),0.14) 0%, transparent 70%)"
         }}
       />
       <BgGlob
@@ -373,7 +373,7 @@ function Hero() {
           width: "500px",
           height: "400px",
           background:
-            "radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 70%)"
+            "radial-gradient(ellipse, rgba(var(--accent-alt-rgb),0.1) 0%, transparent 70%)"
         }}
       />
 

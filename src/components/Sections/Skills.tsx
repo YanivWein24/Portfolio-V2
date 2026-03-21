@@ -22,12 +22,12 @@ const ParallaxBg = styled(motion.div).attrs({ className: "SkillsParallaxBg" })`
   background:
     radial-gradient(
       ellipse at 80% 20%,
-      rgba(124, 58, 237, 0.08) 0%,
+      rgba(var(--accent-alt-rgb), 0.08) 0%,
       transparent 55%
     ),
     radial-gradient(
       ellipse at 20% 80%,
-      rgba(44, 139, 255, 0.07) 0%,
+      rgba(var(--primary-rgb), 0.07) 0%,
       transparent 55%
     );
   pointer-events: none;
@@ -76,7 +76,7 @@ const TabBtn = styled.button.attrs({ className: "SkillsTabBtn" })<TabBtnProps>`
   border: 1px solid
     ${({ $active }) => ($active ? theme.colors.primary : theme.colors.border)};
   background: ${({ $active }) =>
-    $active ? `rgba(44,139,255,0.15)` : "transparent"};
+    $active ? `rgba(var(--primary-rgb),0.15)` : "transparent"};
   color: ${({ $active }) =>
     $active ? theme.colors.primaryLight : theme.colors.text.muted};
   letter-spacing: 0.3px;
@@ -125,7 +125,7 @@ const SkillCard = styled(motion.div).attrs({ className: "SkillCard" })`
     border-color: var(--skill-color);
     transform: translateY(-6px);
     box-shadow:
-      0 8px 30px rgba(0, 0, 0, 0.3),
+      0 8px 30px rgba(var(--shadow-rgb), 0.3),
       0 0 20px color-mix(in srgb, var(--skill-color) 20%, transparent);
   }
 `;
@@ -134,7 +134,7 @@ const SkillImg = styled.img.attrs({ className: "SkillImg" })`
   width: 44px;
   height: 44px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 2px 6px rgba(var(--shadow-rgb), 0.3));
   transition: transform ${theme.transitions.normal};
 
   ${SkillCard}:hover & {

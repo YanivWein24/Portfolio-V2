@@ -1,30 +1,29 @@
 const theme = {
   colors: {
-    bg: "#050d1a",
-    bgAlt: "#071020",
-    surface: "#0b1829",
-    surfaceHigh: "#0f1f33",
-    border: "rgba(255,255,255,0.08)",
-    borderHover: "rgba(44,139,255,0.4)",
-    primary: "#2c8bff",
-    primaryLight: "#5aaeff",
-    primaryDark: "#0e51a3",
-    accent: "#00d4ff",
-    accentAlt: "#7c3aed",
+    bg: "var(--color-bg)",
+    bgAlt: "var(--color-bg-alt)",
+    surface: "var(--color-surface)",
+    surfaceHigh: "var(--color-surface-high)",
+    border: "var(--color-border)",
+    borderHover: "var(--color-border-hover)",
+    primary: "var(--color-primary)",
+    primaryLight: "var(--color-primary-light)",
+    primaryDark: "var(--color-primary-dark)",
+    accent: "var(--color-accent)",
+    accentAlt: "var(--color-accent-alt)",
     text: {
-      primary: "#f0f6ff",
-      secondary: "rgba(240,246,255,0.65)",
-      muted: "rgba(240,246,255,0.38)"
+      primary: "var(--color-text-primary)",
+      secondary: "var(--color-text-secondary)",
+      muted: "var(--color-text-muted)"
     },
     gradients: {
-      hero: "linear-gradient(135deg, #050d1a 0%, #0e2a50 60%, #0e51a3 100%)",
-      primary: "linear-gradient(135deg, #0e51a3 0%, #2c8bff 100%)",
-      glow: "radial-gradient(ellipse at 50% 0%, rgba(44,139,255,0.18) 0%, transparent 70%)",
-      glowAccent:
-        "radial-gradient(ellipse at 50% 50%, rgba(0,212,255,0.12) 0%, transparent 60%)",
-      card: "linear-gradient(145deg, #0b1829 0%, #0f1f33 100%)",
-      section: "linear-gradient(180deg, #050d1a 0%, #071020 100%)",
-      sectionAlt: "linear-gradient(180deg, #071020 0%, #050d1a 100%)"
+      hero: "var(--gradient-hero)",
+      primary: "var(--gradient-primary)",
+      glow: "var(--gradient-glow)",
+      glowAccent: "var(--gradient-glow-accent)",
+      card: "var(--gradient-card)",
+      section: "var(--gradient-section)",
+      sectionAlt: "var(--gradient-section-alt)"
     }
   },
   typography: {
@@ -82,13 +81,13 @@ const theme = {
     full: "9999px"
   },
   shadows: {
-    sm: "0 2px 8px rgba(0,0,0,0.3)",
-    md: "0 4px 20px rgba(0,0,0,0.4)",
-    lg: "0 8px 40px rgba(0,0,0,0.5)",
-    xl: "0 16px 60px rgba(0,0,0,0.6)",
-    glow: "0 0 30px rgba(44,139,255,0.25), 0 0 60px rgba(44,139,255,0.1)",
-    glowStrong: "0 0 40px rgba(44,139,255,0.4), 0 0 80px rgba(44,139,255,0.15)",
-    glowAccent: "0 0 30px rgba(0,212,255,0.25)"
+    sm: "var(--shadow-sm)",
+    md: "var(--shadow-md)",
+    lg: "var(--shadow-lg)",
+    xl: "var(--shadow-xl)",
+    glow: "var(--shadow-glow)",
+    glowStrong: "var(--shadow-glow-strong)",
+    glowAccent: "var(--shadow-glow-accent)"
   },
   transitions: {
     fast: "0.15s ease",

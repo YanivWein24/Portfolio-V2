@@ -30,12 +30,12 @@ const ParallaxBg = styled(motion.div).attrs({ className: "ContactParallaxBg" })`
   background:
     radial-gradient(
       ellipse at 50% 50%,
-      rgba(44, 139, 255, 0.08) 0%,
+      rgba(var(--primary-rgb), 0.08) 0%,
       transparent 60%
     ),
     radial-gradient(
       ellipse at 90% 10%,
-      rgba(124, 58, 237, 0.07) 0%,
+      rgba(var(--accent-alt-rgb), 0.07) 0%,
       transparent 50%
     );
   pointer-events: none;
@@ -117,7 +117,7 @@ const InfoCard = styled.div.attrs({ className: "ContactInfoCard" })`
     transform ${theme.transitions.normal};
 
   &:hover {
-    border-color: rgba(44, 139, 255, 0.35);
+    border-color: rgba(var(--primary-rgb), 0.35);
     transform: translateX(4px);
   }
 `;
@@ -126,7 +126,7 @@ const IconWrap = styled.div.attrs({ className: "ContactIconWrap" })`
   width: 44px;
   height: 44px;
   border-radius: ${theme.borderRadius.md};
-  background: rgba(44, 139, 255, 0.12);
+  background: rgba(var(--primary-rgb), 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -208,7 +208,7 @@ const inputStyles = `
 
   &:focus {
     border-color: ${theme.colors.primary};
-    box-shadow: 0 0 0 3px rgba(44, 139, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
   }
 `;
 
@@ -243,7 +243,7 @@ const SubmitBtn = styled(motion.button).attrs({
   color: #fff;
   cursor: pointer;
   align-self: flex-start;
-  box-shadow: 0 4px 12px rgba(44, 139, 255, 0.35);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.35);
   transition: box-shadow 0.25s ease;
 
   &:disabled {
@@ -252,7 +252,7 @@ const SubmitBtn = styled(motion.button).attrs({
   }
 
   &:not(:disabled):hover {
-    box-shadow: 0 6px 20px rgba(44, 139, 255, 0.5);
+    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.5);
   }
 
   svg {

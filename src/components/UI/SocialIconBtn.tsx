@@ -16,9 +16,12 @@ const variantStyles = {
     border: none;
     &:hover {
       color: ${theme.colors.text.primary};
-      background: rgba(44, 139, 255, 0.12);
+      background: rgba(var(--primary-rgb), 0.12);
     }
-    svg { width: 17px; height: 17px; }
+    svg {
+      width: 17px;
+      height: 17px;
+    }
   `,
   bordered: css`
     width: 36px;
@@ -29,9 +32,12 @@ const variantStyles = {
     &:hover {
       border-color: ${theme.colors.primary};
       color: ${theme.colors.primaryLight};
-      background: rgba(44, 139, 255, 0.1);
+      background: rgba(var(--primary-rgb), 0.1);
     }
-    svg { width: 16px; height: 16px; }
+    svg {
+      width: 16px;
+      height: 16px;
+    }
   `,
   mobile: css`
     width: 40px;
@@ -42,13 +48,18 @@ const variantStyles = {
     &:hover {
       border-color: ${theme.colors.primary};
       color: ${theme.colors.text.primary};
-      background: rgba(44, 139, 255, 0.1);
+      background: rgba(var(--primary-rgb), 0.1);
     }
-    svg { width: 18px; height: 18px; }
-  `,
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  `
 };
 
-const SocialIconBtn = styled.a.attrs({ className: "SocialIconBtn" })<SocialIconBtnProps>`
+const SocialIconBtn = styled.a.attrs({
+  className: "SocialIconBtn"
+})<SocialIconBtnProps>`
   display: flex;
   align-items: center;
   justify-content: center;
