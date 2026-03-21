@@ -26,7 +26,6 @@ const socialLinks = [
 
 interface ScrolledProps {
   $scrolled: boolean;
-  $isOpen?: boolean;
 }
 
 const Nav = styled.header.attrs({ className: "Header" })<ScrolledProps>`
@@ -34,8 +33,7 @@ const Nav = styled.header.attrs({ className: "Header" })<ScrolledProps>`
   top: 0;
   left: 0;
   right: 0;
-  z-index: ${({ $isOpen }) =>
-    $isOpen ? theme.zIndex.overlay + 10 : theme.zIndex.fixed};
+  z-index: ${theme.zIndex.fixed};
   transition:
     background 0.4s ease,
     backdrop-filter 0.4s ease,
@@ -167,33 +165,28 @@ const Actions = styled.div.attrs({ className: "HeaderActions" })`
   `}
 `;
 
-interface HamburgerWrapperProps {
-  $visible: boolean;
-}
-const HamburgerWrapper = styled.div.attrs({
-  className: "HamburgerWrapper"
-})<HamburgerWrapperProps>`
+const FloatingHamburger = styled.div.attrs({
+  className: "FloatingHamburger"
+})<ScrolledProps>`
   display: none;
+  position: fixed;
+  right: 0;
   width: 44px;
   height: 44px;
-  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  right: ${theme.spacing.lg};
-  z-index: ${theme.zIndex.overlay + 10};
+  z-index: ${theme.zIndex.overlay + 20};
+  top: ${({ $scrolled }) => ($scrolled ? "12px" : "24px")};
+  transition: top 0.4s ease;
 
   ${MaxWidth.md`
     display: flex;
+    right: ${theme.spacing.lg};
   `}
 
   ${MaxWidth.sm`
     right: ${theme.spacing.md};
   `}
-`;
-
-const FloatingHamburger = styled.div.attrs({ className: "FloatingHamburger" })`
-  display: none;
 `;
 
 const ThemeToggle = styled.button.attrs({ className: "ThemeToggle" })`
@@ -227,7 +220,7 @@ const Overlay = styled(motion.div).attrs({ className: "MobileOverlay" })`
   inset: 0;
   background: rgba(var(--shadow-rgb), 0.7);
   backdrop-filter: blur(4px);
-  z-index: ${theme.zIndex.overlay - 1};
+  z-index: ${theme.zIndex.overlay};
 `;
 
 const MobileMenu = styled(motion.div).attrs({ className: "MobileMenu" })`
@@ -243,7 +236,7 @@ const MobileMenu = styled(motion.div).attrs({ className: "MobileMenu" })`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.xl};
-  z-index: ${theme.zIndex.overlay - 1};
+  z-index: ${theme.zIndex.overlay + 10};
   overflow-y: auto;
 `;
 
@@ -320,7 +313,7 @@ function Header() {
 
   return (
     <>
-      <Nav $scrolled={scrolled} $isOpen={isOpen}>
+      <Nav $scrolled={scrolled}>
         <Inner>
           <Logo
             to="hero"
@@ -377,14 +370,12 @@ function Header() {
               {isDark ? <Sun /> : <Moon />}
             </ThemeToggle>
           </Actions>
-
-          <HamburgerWrapper $visible={isOpen}>
-            <Hamburger isOpen={isOpen} onClick={() => setIsOpen((v) => !v)} />
-          </HamburgerWrapper>
         </Inner>
       </Nav>
 
-      <FloatingHamburger />
+      <FloatingHamburger $scrolled={scrolled}>
+        <Hamburger isOpen={isOpen} onClick={() => setIsOpen((v) => !v)} />
+      </FloatingHamburger>
 
       <AnimatePresence>
         {isOpen && (
