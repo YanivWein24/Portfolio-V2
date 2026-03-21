@@ -24,14 +24,23 @@ const Inner = styled.div.attrs({ className: "FooterInner" })`
   ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
   `}
+
+  ${MaxWidth.sm`
+    padding: 0 ${theme.spacing.md};
+  `}
 `;
 
 const Top = styled.div.attrs({ className: "FooterTop" })`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
   gap: ${theme.spacing.lg};
+
+  ${MaxWidth.md`
+    justify-content: center;
+    flex-wrap: wrap;
+  `}
 `;
 
 interface ScrollLinkProps {
@@ -51,6 +60,12 @@ const Logo = styled(Link).attrs({ className: "FooterLogo" })<ScrollLinkProps>`
   background-clip: text;
   cursor: pointer;
   letter-spacing: -0.5px;
+  position: absolute;
+  left: 0;
+
+  ${MaxWidth.md`
+    position: static;
+  `}
 `;
 
 const Nav = styled.nav.attrs({ className: "FooterNav" })`
@@ -79,6 +94,12 @@ const NavLink = styled(Link).attrs({
 const Socials = styled.div.attrs({ className: "FooterSocials" })`
   display: flex;
   gap: ${theme.spacing.md};
+  position: absolute;
+  right: 0;
+
+  ${MaxWidth.md`
+    position: static;
+  `}
 `;
 
 const Divider = styled.hr.attrs({ className: "FooterDivider" })`
@@ -92,6 +113,12 @@ const Bottom = styled.div.attrs({ className: "FooterBottom" })`
   justify-content: space-between;
   flex-wrap: wrap;
   gap: ${theme.spacing.md};
+
+  ${MaxWidth.sm`
+    flex-direction: column;
+    align-items: center;
+    gap: ${theme.spacing.sm};
+  `}
 `;
 
 const Copyright = styled.p.attrs({ className: "FooterCopyright" })`
