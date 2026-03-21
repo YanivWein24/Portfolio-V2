@@ -43,6 +43,15 @@ const GlobalStyles = createGlobalStyle`
     color: #fff;
   }
 
+  /* Scroll-snap — desktop only (touch inertia makes it sluggish on mobile) */
+  @media (min-width: ${theme.breakpoints.lg}px) {
+    html {
+      scroll-snap-type: y proximity;
+    }
+    main > section {
+      scroll-snap-align: start;
+    }
+  }
 
   /* Stacking order: later sections sit on top of earlier ones */
   main > section:nth-child(1) { z-index: 1; }
