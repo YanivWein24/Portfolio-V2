@@ -25,6 +25,7 @@ const socialLinks = [
 
 interface ScrolledProps {
   $scrolled: boolean;
+  $isOpen?: boolean;
 }
 
 const Nav = styled.header.attrs({ className: "Header" })<ScrolledProps>`
@@ -32,7 +33,8 @@ const Nav = styled.header.attrs({ className: "Header" })<ScrolledProps>`
   top: 0;
   left: 0;
   right: 0;
-  z-index: ${theme.zIndex.fixed};
+  z-index: ${({ $isOpen }) =>
+    $isOpen ? theme.zIndex.overlay + 10 : theme.zIndex.fixed};
   transition:
     background 0.4s ease,
     backdrop-filter 0.4s ease,
@@ -64,11 +66,17 @@ const Inner = styled.div.attrs({ className: "HeaderInner" })`
   padding: 0 ${theme.spacing.xl};
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: ${theme.spacing.lg};
+  justify-content: center;
+  position: relative;
+  height: 100%;
 
   ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
+    justify-content: space-between;
+  `}
+
+  ${MaxWidth.sm`
+    padding: 0 ${theme.spacing.md};
   `}
 `;
 
@@ -89,12 +97,22 @@ const Logo = styled(Link).attrs({ className: "Logo" })<ScrollLinkProps>`
   background-clip: text;
   cursor: pointer;
   letter-spacing: -0.5px;
+  position: absolute;
+  left: ${theme.spacing.xl};
+
+  ${MaxWidth.md`
+    position: static;
+  `}
 `;
 
 const NavLinks = styled.nav.attrs({ className: "NavLinks" })`
   display: flex;
   align-items: center;
   gap: ${theme.spacing.md};
+
+  ${MaxWidth.lg`
+    gap: ${theme.spacing.sm};
+  `}
 
   ${MaxWidth.md`
     display: none;
@@ -136,9 +154,15 @@ const Actions = styled.div.attrs({ className: "HeaderActions" })`
   display: flex;
   align-items: center;
   gap: ${theme.spacing.sm};
+  position: absolute;
+  right: ${theme.spacing.xl};
 
   ${MaxWidth.md`
     display: none;
+  `}
+
+  ${MaxWidth.sm`
+    right: ${theme.spacing.md};
   `}
 `;
 
@@ -151,21 +175,24 @@ const HamburgerWrapper = styled.div.attrs({
   display: none;
   width: 44px;
   height: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: ${theme.spacing.lg};
+  z-index: ${theme.zIndex.overlay + 10};
+
   ${MaxWidth.md`
-    display: block;
+    display: flex;
+  `}
+
+  ${MaxWidth.sm`
+    right: ${theme.spacing.md};
   `}
 `;
 
 const FloatingHamburger = styled.div.attrs({ className: "FloatingHamburger" })`
   display: none;
-  position: fixed;
-  top: 12px;
-  right: ${theme.spacing.lg};
-  z-index: ${theme.zIndex.overlay + 50};
-
-  ${MaxWidth.md`
-    display: block;
-  `}
 `;
 
 const Overlay = styled(motion.div).attrs({ className: "MobileOverlay" })`
@@ -181,7 +208,7 @@ const MobileMenu = styled(motion.div).attrs({ className: "MobileMenu" })`
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(340px, 85vw);
+  width: min(300px, 80vw);
   background: ${theme.colors.surface};
   border-left: 1px solid ${theme.colors.border};
   padding: ${theme.spacing.xl};
@@ -265,7 +292,7 @@ function Header() {
 
   return (
     <>
-      <Nav $scrolled={scrolled}>
+      <Nav $scrolled={scrolled} $isOpen={isOpen}>
         <Inner>
           <Logo
             to="hero"
@@ -320,13 +347,13 @@ function Header() {
             </ButtonLink>
           </Actions>
 
-          <HamburgerWrapper $visible={false} />
+          <HamburgerWrapper $visible={isOpen}>
+            <Hamburger isOpen={isOpen} onClick={() => setIsOpen((v) => !v)} />
+          </HamburgerWrapper>
         </Inner>
       </Nav>
 
-      <FloatingHamburger>
-        <Hamburger isOpen={isOpen} onClick={() => setIsOpen((v) => !v)} />
-      </FloatingHamburger>
+      <FloatingHamburger />
 
       <AnimatePresence>
         {isOpen && (
