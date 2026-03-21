@@ -20,11 +20,15 @@ import timeline from "@data/timeline";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
 
-const Section = styled.section.attrs({ className: "Experience" })`
+const Section = styled.section.attrs({ className: "Experience" })<{
+  $isOpen: boolean;
+}>`
   position: relative;
-  padding: ${theme.spacing["5xl"]} 0 400px;
+  padding: ${theme.spacing["5xl"]} 0
+    ${({ $isOpen }) => ($isOpen ? "600px" : "400px")};
   background: ${theme.colors.bgAlt};
   overflow: hidden;
+  transition: padding-bottom 0.4s ease;
 `;
 
 const ParallaxBg = styled(motion.div).attrs({
@@ -342,7 +346,7 @@ function Experience() {
   );
 
   return (
-    <Section ref={ref} id="experience">
+    <Section ref={ref} id="experience" $isOpen={openIndex !== null}>
       <ParallaxBg style={{ y: bgY }} />
       <motion.div style={{ y: contentY, opacity: contentOpacity }}>
         <Container ref={inViewRef}>

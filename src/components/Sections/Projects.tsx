@@ -10,9 +10,13 @@ import projects from "@data/projects";
 
 const Section = styled.section.attrs({ className: "Projects" })`
   position: relative;
-  padding: ${theme.spacing["5xl"]} 0 400px;
+  padding: ${theme.spacing["5xl"]} 0 600px;
   background: ${theme.colors.bg};
   overflow: hidden;
+
+  ${MaxWidth.sm`
+    padding: ${theme.spacing["5xl"]} 0 1000px; 
+  `}
 `;
 
 const ParallaxBg = styled(motion.div).attrs({
