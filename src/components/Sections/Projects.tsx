@@ -331,7 +331,7 @@ function ProjectCardInner({ project }: ProjectCardInnerProps) {
 
 function Projects() {
   const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
-  const [inViewRef, inView] = useInView({ threshold: 0.08, triggerOnce: true });
+  const [inViewRef, inView] = useInView({ threshold: 0.08 });
 
   return (
     <Section ref={ref} id="projects">

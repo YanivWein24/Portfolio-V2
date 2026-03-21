@@ -308,7 +308,7 @@ function Experience() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
   const entryRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [inViewRef, inView] = useInView({ threshold: 0.05, triggerOnce: true });
+  const [inViewRef, inView] = useInView({ threshold: 0.05 });
 
   const scrollToEntry = (i: number) => {
     const el = entryRefs.current[i];

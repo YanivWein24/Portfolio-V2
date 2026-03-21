@@ -240,7 +240,7 @@ interface StatCardWithRefProps {
 }
 
 function StatCardWithRef({ index, stat }: StatCardWithRefProps) {
-  const [ref, inView] = useInView({ threshold: 0.5, triggerOnce: true });
+  const [ref, inView] = useInView({ threshold: 0.5 });
   return (
     <StatCard
       ref={ref}
@@ -270,7 +270,7 @@ function StatCardWithRef({ index, stat }: StatCardWithRefProps) {
 function About() {
   const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
 
-  const [inViewRef, inView] = useInView({ threshold: 0.15, triggerOnce: true });
+  const [inViewRef, inView] = useInView({ threshold: 0.15 });
 
   return (
     <Section ref={ref} id="about">

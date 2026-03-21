@@ -356,7 +356,7 @@ function Contact() {
   const [status, setStatus] = useState<Status>("idle");
 
   const { ref, bgY } = useSectionParallax();
-  const [inViewRef, inView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [inViewRef, inView] = useInView({ threshold: 0.1 });
 
   const waitAndClearMessage = () => {
     setTimeout(() => {

@@ -179,7 +179,7 @@ function Skills() {
   const [activeTab, setActiveTab] = useState<keyof SkillSet>("frontend");
   const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
 
-  const [inViewRef, inView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [inViewRef, inView] = useInView({ threshold: 0.1 });
 
   return (
     <Section ref={ref} id="skills">
