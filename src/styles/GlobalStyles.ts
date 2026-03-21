@@ -162,6 +162,11 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
+  /* Ensure all sections have minimum height */
+  section {
+    min-height: 100vh;
+  }
+
   /* Stacking order: later sections sit on top of earlier ones */
   main > section:nth-child(1) { z-index: 1; }
   main > section:nth-child(2) { z-index: 2; }
