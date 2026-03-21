@@ -22,7 +22,6 @@ export interface TimelineEntry {
 export interface Skill {
   name: string;
   color: string;
-  link: string;
   img: string;
 }
 
