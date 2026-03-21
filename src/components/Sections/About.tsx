@@ -1,21 +1,24 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import type { Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import useSectionParallax from "@hooks/useSectionParallax";
 import AnimatedNumbers from "react-animated-numbers";
 const AnimatedNumbersComponent =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (AnimatedNumbers as any).default || AnimatedNumbers;
+import useSectionParallax from "@hooks/useSectionParallax";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
 import Text from "../../constants";
 
 const Section = styled.section.attrs({ className: "About" })`
   position: relative;
-  padding: ${theme.spacing["5xl"]} 0;
+  padding: ${theme.spacing["5xl"]} 0 200px;
   background: ${theme.colors.bgAlt};
   overflow: hidden;
+
+  ${MaxWidth.md`
+    padding: ${theme.spacing["5xl"]} 0 400px;
+  `}
 `;
 
 const ParallaxBg = styled(motion.div).attrs({ className: "AboutParallaxBg" })`
@@ -279,7 +282,7 @@ function StatCardWithRef({ index, stat }: StatCardWithRefProps) {
 }
 
 function About() {
-  const { ref, bgY } = useSectionParallax();
+  const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
 
   const [inViewRef, inView] = useInView({ threshold: 0.15, triggerOnce: true });
 
@@ -287,53 +290,55 @@ function About() {
     <Section ref={ref} id="about">
       <ParallaxBg style={{ y: bgY }} />
 
-      <Container ref={inViewRef}>
-        <SectionLabel
-          initial={{ opacity: 0, y: 10 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          About Me
-        </SectionLabel>
-        <SectionTitle
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Engineering with purpose,
-          <br />
-          shipping with precision.
-        </SectionTitle>
-
-        <Grid>
-          <TextCol
-            variants={fadeLeft}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
+      <motion.div style={{ y: contentY, opacity: contentOpacity }}>
+        <Container ref={inViewRef}>
+          <SectionLabel
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
           >
-            <BodyText>{Text.aboutMe}</BodyText>
-            <Divider />
-            <BodyText>{Text.alwaysDiscovering}</BodyText>
-            <HighlightBox
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 }}
+            About Me
+          </SectionLabel>
+          <SectionTitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Engineering with purpose,
+            <br />
+            shipping with precision.
+          </SectionTitle>
+
+          <Grid>
+            <TextCol
+              variants={fadeLeft}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
             >
-              {Text.yearsOfExperience}
-            </HighlightBox>
-          </TextCol>
+              <BodyText>{Text.aboutMe}</BodyText>
+              <Divider />
+              <BodyText>{Text.alwaysDiscovering}</BodyText>
+              <HighlightBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                {Text.yearsOfExperience}
+              </HighlightBox>
+            </TextCol>
 
-          <StatsCol
-            variants={fadeRight}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-          >
-            {Text.stats.map((stat, i) => (
-              <StatCardWithRef key={stat.label} index={i} stat={stat} />
-            ))}
-          </StatsCol>
-        </Grid>
-      </Container>
+            <StatsCol
+              variants={fadeRight}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+            >
+              {Text.stats.map((stat, i) => (
+                <StatCardWithRef key={stat.label} index={i} stat={stat} />
+              ))}
+            </StatsCol>
+          </Grid>
+        </Container>
+      </motion.div>
     </Section>
   );
 }

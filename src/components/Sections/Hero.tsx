@@ -1,16 +1,17 @@
 import { useRef, useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useSpring, animated } from "@react-spring/web";
 import { Link } from "react-scroll";
 import { TypeAnimation } from "react-type-animation";
 import { ArrowDown, Github, Linkedin, Mail, Eye, Download } from "lucide-react";
+import { Button, ButtonLink, ButtonScrollLink } from "@components/UI/Button";
+import SocialIconBtn from "@components/UI/SocialIconBtn";
+import PdfViewerModal from "@components/UI/PdfViewerModal";
 import Profile from "@assets/media/profile.jpg";
 import Resume from "@assets/Yaniv-Resume.pdf";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
-import { Button, ButtonLink, ButtonScrollLink } from "@components/UI/Button";
-import SocialIconBtn from "@components/UI/SocialIconBtn";
-import PdfViewerModal from "@components/UI/PdfViewerModal";
 import Text from "../../constants";
 
 const floatY = keyframes`
@@ -37,43 +38,12 @@ const Wrapper = styled.section.attrs({ className: "Hero" })`
   background: ${theme.colors.bg};
 `;
 
-const BgGlow = styled.div.attrs({ className: "HeroBgGlow" })`
+const BgGlob = styled(animated.div).attrs({ className: "HeroBgGlob" })`
   position: absolute;
-  inset: 0;
   pointer-events: none;
   z-index: 0;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 900px;
-    height: 600px;
-    background: radial-gradient(
-      ellipse,
-      rgba(44, 139, 255, 0.14) 0%,
-      transparent 70%
-    );
-    filter: blur(40px);
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 10%;
-    width: 500px;
-    height: 400px;
-    background: radial-gradient(
-      ellipse,
-      rgba(124, 58, 237, 0.1) 0%,
-      transparent 70%
-    );
-    filter: blur(60px);
-    animation: ${pulse} 8s ease-in-out infinite;
-  }
+  border-radius: 50%;
+  filter: blur(60px);
 `;
 
 const Grid = styled.div.attrs({ className: "HeroGrid" })`
@@ -91,6 +61,15 @@ const Grid = styled.div.attrs({ className: "HeroGrid" })`
     grid-template-columns: 1fr;
     text-align: center;
     padding-top: 140px;
+  `}
+
+  ${MaxWidth.md`
+    padding: 100px ${theme.spacing.lg} ${theme.spacing["2xl"]};
+    gap: ${theme.spacing.xl};
+  `}
+
+  ${MaxWidth.sm`
+    padding: 90px ${theme.spacing.md} ${theme.spacing.xl};
   `}
 `;
 
@@ -149,6 +128,7 @@ const GradientSpan = styled.span.attrs({ className: "GradientSpan" })`
 
 const TypeRow = styled(motion.div).attrs({ className: "HeroTypeRow" })`
   font-size: clamp(1.1rem, 2.5vw, ${theme.typography.fontSizes["2xl"]});
+  letter-spacing: 0.1px;
   font-weight: ${theme.typography.fontWeights.medium};
   color: ${theme.colors.text.secondary};
   min-height: 2em;
@@ -213,9 +193,14 @@ const ImageFrame = styled.div.attrs({ className: "HeroImageFrame" })`
   height: 340px;
   animation: ${floatY} 6s ease-in-out infinite;
 
+  ${MaxWidth.md`
+    width: 260px;
+    height: 260px;
+  `}
+
   ${MaxWidth.sm`
-    width: 240px;
-    height: 240px;
+    width: 200px;
+    height: 200px;
   `}
 `;
 
@@ -336,12 +321,29 @@ function Hero() {
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768
   );
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const blob1Spring = useSpring({
+    transform: `translate(-50%, calc(-20% + ${scrollY * -0.35}px))`,
+    config: { mass: 1, tension: 80, friction: 26 }
+  });
+
+  const blob2Spring = useSpring({
+    transform: `translate(0%, calc(0% + ${scrollY * 0.25}px))`,
+    config: { mass: 1, tension: 60, friction: 22 }
+  });
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -352,7 +354,28 @@ function Hero() {
 
   return (
     <Wrapper ref={ref} id="hero">
-      <BgGlow />
+      <BgGlob
+        style={{
+          ...blob1Spring,
+          top: "-20%",
+          left: "50%",
+          width: "900px",
+          height: "600px",
+          background:
+            "radial-gradient(ellipse, rgba(44,139,255,0.14) 0%, transparent 70%)"
+        }}
+      />
+      <BgGlob
+        style={{
+          ...blob2Spring,
+          bottom: "0",
+          right: "10%",
+          width: "500px",
+          height: "400px",
+          background:
+            "radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 70%)"
+        }}
+      />
 
       <motion.div style={{ y, opacity, width: "100%" }}>
         <Grid>
@@ -459,7 +482,7 @@ function Hero() {
             </ImageFrame>
 
             <TechBadge
-              style={{ top: "8%", right: "-5%" }}
+              style={{ top: "8%", right: "0" }}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.1, duration: 0.5 }}
@@ -467,7 +490,7 @@ function Hero() {
               ⚛️ React & Next.js
             </TechBadge>
             <TechBadge
-              style={{ bottom: "18%", left: "-8%" }}
+              style={{ bottom: "18%", left: "0%" }}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.3, duration: 0.5 }}
@@ -475,7 +498,7 @@ function Hero() {
               🟢 Node.js + TypeScript
             </TechBadge>
             <TechBadge
-              style={{ bottom: "3%", right: "5%" }}
+              style={{ bottom: "0%", right: "5%" }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.5 }}

@@ -1,8 +1,6 @@
-import { useRef, useState } from "react";
-import type { FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import styled from "styled-components";
-import { motion, useScroll, useTransform } from "framer-motion";
-import type { Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import emailjs from "@emailjs/browser";
 import {
@@ -13,6 +11,7 @@ import {
   Github,
   Linkedin
 } from "lucide-react";
+import useSectionParallax from "@hooks/useSectionParallax";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
 import Text from "../../constants";
@@ -50,6 +49,10 @@ const Container = styled.div.attrs({ className: "ContactContainer" })`
 
   ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
+  `}
+
+  ${MaxWidth.sm`
+    padding: 0 ${theme.spacing.md};
   `}
 `;
 
@@ -96,6 +99,11 @@ const Grid = styled.div.attrs({ className: "ContactGrid" })`
 
   ${MaxWidth.lg`
     grid-template-columns: 1fr;
+    gap: ${theme.spacing.xl};
+  `}
+
+  ${MaxWidth.sm`
+    gap: ${theme.spacing.lg};
   `}
 `;
 
@@ -227,6 +235,7 @@ const SubmitBtn = styled(motion.button).attrs({
   justify-content: center;
   gap: 8px;
   padding: 14px 32px;
+  margin-top: ${theme.spacing.sm};
   background: linear-gradient(
     135deg,
     ${theme.colors.primary} 0%,
@@ -255,6 +264,10 @@ const SubmitBtn = styled(motion.button).attrs({
     width: 16px;
     height: 16px;
   }
+
+  ${MaxWidth.sm`
+      margin: ${theme.spacing.sm} auto 0;
+    `}
 `;
 
 interface StatusProps {
@@ -316,12 +329,7 @@ function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<Status>("idle");
 
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  const { ref, bgY } = useSectionParallax();
   const [inViewRef, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

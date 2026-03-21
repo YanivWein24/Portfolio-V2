@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { motion, useScroll, useTransform } from "framer-motion";
-import type { Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import useSectionParallax from "@hooks/useSectionParallax";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
 import skillsData from "@data/skills";
@@ -10,7 +10,7 @@ import type { SkillSet } from "@appTypes/index";
 
 const Section = styled.section.attrs({ className: "Skills" })`
   position: relative;
-  padding: ${theme.spacing["5xl"]} 0;
+  padding: ${theme.spacing["5xl"]} 0 200px;
   background: ${theme.colors.bg};
   overflow: hidden;
 `;
@@ -41,6 +41,10 @@ const Container = styled.div.attrs({ className: "SkillsContainer" })`
 
   ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
+  `}
+
+  ${MaxWidth.sm`
+    padding: 0 ${theme.spacing.md};
   `}
 `;
 
@@ -190,72 +194,71 @@ const cardVariants: Variants = {
 
 function Skills() {
   const [activeTab, setActiveTab] = useState<keyof SkillSet>("frontend");
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
 
   const [inViewRef, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
   return (
     <Section ref={ref} id="skills">
       <ParallaxBg style={{ y: bgY }} />
-      <Container ref={inViewRef}>
-        <Header>
-          <SectionLabel
-            initial={{ opacity: 0, y: 10 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-          >
-            Skills
-          </SectionLabel>
-          <SectionTitle
+      <motion.div style={{ y: contentY, opacity: contentOpacity }}>
+        <Container ref={inViewRef}>
+          <Header>
+            <SectionLabel
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+            >
+              Skills
+            </SectionLabel>
+            <SectionTitle
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              Tech I work with
+            </SectionTitle>
+          </Header>
+
+          <Tabs
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Tech I work with
-          </SectionTitle>
-        </Header>
-
-        <Tabs
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          {TABS.map((tab) => (
-            <TabBtn
-              key={tab.key}
-              $active={activeTab === tab.key}
-              onClick={() => setActiveTab(tab.key)}
-            >
-              {tab.label}
-            </TabBtn>
-          ))}
-        </Tabs>
-
-        <GridWrapper>
-          <Grid
-            key={activeTab}
-            variants={gridVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {skillsData[activeTab].map((skill) => (
-              <SkillCard
-                key={skill.name}
-                style={{ "--skill-color": skill.color } as React.CSSProperties}
-                variants={cardVariants}
+            {TABS.map((tab) => (
+              <TabBtn
+                key={tab.key}
+                $active={activeTab === tab.key}
+                onClick={() => setActiveTab(tab.key)}
               >
-                <SkillImg src={skill.img} alt={skill.name} loading="lazy" />
-                <SkillName>{skill.name}</SkillName>
-              </SkillCard>
+                {tab.label}
+              </TabBtn>
             ))}
-          </Grid>
-        </GridWrapper>
-      </Container>
+          </Tabs>
+
+          <GridWrapper>
+            <Grid
+              key={activeTab}
+              variants={gridVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {skillsData[activeTab].map((skill) => (
+                <SkillCard
+                  key={skill.name}
+                  style={
+                    { "--skill-color": skill.color } as React.CSSProperties
+                  }
+                  variants={cardVariants}
+                >
+                  <SkillImg src={skill.img} alt={skill.name} loading="lazy" />
+                  <SkillName>{skill.name}</SkillName>
+                </SkillCard>
+              ))}
+            </Grid>
+          </GridWrapper>
+        </Container>
+      </motion.div>
     </Section>
   );
 }

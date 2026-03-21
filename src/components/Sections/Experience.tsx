@@ -1,12 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import {
   motion,
-  useScroll,
-  useTransform,
-  AnimatePresence
+  AnimatePresence,
+  LayoutGroup,
+  type Variants
 } from "framer-motion";
-import type { Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import {
   Briefcase,
@@ -15,14 +14,15 @@ import {
   ExternalLink,
   ChevronDown
 } from "lucide-react";
+import useSectionParallax from "@hooks/useSectionParallax";
+import type { TimelineEntry } from "@appTypes/index";
+import timeline from "@data/timeline";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
-import timeline from "@data/timeline";
-import type { TimelineEntry } from "@appTypes/index";
 
 const Section = styled.section.attrs({ className: "Experience" })`
   position: relative;
-  padding: ${theme.spacing["5xl"]} 0;
+  padding: ${theme.spacing["5xl"]} 0 400px;
   background: ${theme.colors.bgAlt};
   overflow: hidden;
 `;
@@ -49,6 +49,10 @@ const Container = styled.div.attrs({ className: "ExperienceContainer" })`
 
   ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
+  `}
+
+  ${MaxWidth.sm`
+    padding: 0 ${theme.spacing.md};
   `}
 `;
 
@@ -275,7 +279,7 @@ const LinkBtn = styled.a.attrs({ className: "TimelineLinkBtn" })`
 
 const CompanyImg = styled.img.attrs({ className: "TimelineCompanyImg" })`
   width: 100%;
-  max-height: 250px;
+  height: 180px;
   object-fit: contain;
   border-radius: ${theme.borderRadius.md};
   margin-bottom: ${theme.spacing.sm};
@@ -315,111 +319,131 @@ const typeIcon: Record<TimelineEntry["type"], React.ReactNode> = {
 
 function Experience() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
+  const entryRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [inViewRef, inView] = useInView({ threshold: 0.05, triggerOnce: true });
 
-  const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
+  const scrollToEntry = (i: number) => {
+    const el = entryRefs.current[i];
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
+  const toggle = useCallback(
+    (i: number) => {
+      const next = openIndex === i ? null : i;
+      if (next !== null) {
+        scrollToEntry(next);
+      }
+      setOpenIndex(next);
+    },
+    [openIndex]
+  );
 
   return (
     <Section ref={ref} id="experience">
       <ParallaxBg style={{ y: bgY }} />
-      <Container ref={inViewRef}>
-        <Header>
-          <SectionLabel
-            initial={{ opacity: 0, y: 10 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-          >
-            Experience
-          </SectionLabel>
-          <SectionTitle
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            My journey so far
-          </SectionTitle>
-        </Header>
-
-        <TimelineWrap>
-          {timeline.map((entry, i) => (
-            <EntryWrapper
-              key={`${entry.header}-${i}`}
-              custom={i}
-              variants={entryVariants}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
+      <motion.div style={{ y: contentY, opacity: contentOpacity }}>
+        <Container ref={inViewRef}>
+          <Header>
+            <SectionLabel
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
             >
-              <Dot $type={entry.type}>{typeIcon[entry.type]}</Dot>
+              Experience
+            </SectionLabel>
+            <SectionTitle
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              My journey so far
+            </SectionTitle>
+          </Header>
 
-              <Card>
-                <CardHeader
-                  onClick={() => toggle(i)}
-                  aria-expanded={openIndex === i}
+          <LayoutGroup>
+            <TimelineWrap>
+              {timeline.map((entry, i) => (
+                <EntryWrapper
+                  key={`${entry.header}-${i}`}
+                  ref={(el) => {
+                    entryRefs.current[i] = el;
+                  }}
+                  layout
+                  custom={i}
+                  variants={entryVariants}
+                  initial="hidden"
+                  animate={inView ? "visible" : "hidden"}
                 >
-                  <CardMeta>
-                    <CardTitle>{entry.header}</CardTitle>
-                    <CardSubtitle>
-                      <Company>{entry.subHeader}</Company>
-                      <DateBadge>{entry.date}</DateBadge>
-                    </CardSubtitle>
-                  </CardMeta>
-                  <ChevronIcon $isOpen={openIndex === i} />
-                </CardHeader>
+                  <Dot $type={entry.type}>{typeIcon[entry.type]}</Dot>
 
-                <AnimatePresence initial={false}>
-                  {openIndex === i && (
-                    <CardBody
-                      key="body"
-                      variants={bodyVariants}
-                      initial="collapsed"
-                      animate="expanded"
-                      exit="collapsed"
+                  <Card layout>
+                    <CardHeader
+                      onClick={() => toggle(i)}
+                      aria-expanded={openIndex === i}
                     >
-                      <CardBodyInner>
-                        {entry.image && (
-                          <CompanyImg
-                            src={entry.image}
-                            alt={entry.subHeader}
-                            loading="lazy"
-                          />
-                        )}
-                        <Description>{entry.text}</Description>
-                        {entry.technologies && (
-                          <TechList>
-                            {entry.technologies.map((tech) => (
-                              <TechChip key={tech}>{tech}</TechChip>
-                            ))}
-                          </TechList>
-                        )}
-                        {entry.link && (
-                          <LinkBtn
-                            href={entry.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Visit <ExternalLink />
-                          </LinkBtn>
-                        )}
-                        {entry.finalProjectScore && (
-                          <TechChip>
-                            Final Score: {entry.finalProjectScore}
-                          </TechChip>
-                        )}
-                      </CardBodyInner>
-                    </CardBody>
-                  )}
-                </AnimatePresence>
-              </Card>
-            </EntryWrapper>
-          ))}
-        </TimelineWrap>
-      </Container>
+                      <CardMeta>
+                        <CardTitle>{entry.header}</CardTitle>
+                        <CardSubtitle>
+                          <Company>{entry.subHeader}</Company>
+                          <DateBadge>{entry.date}</DateBadge>
+                        </CardSubtitle>
+                      </CardMeta>
+                      <ChevronIcon $isOpen={openIndex === i} />
+                    </CardHeader>
+
+                    <AnimatePresence initial={false}>
+                      {openIndex === i && (
+                        <CardBody
+                          key="body"
+                          variants={bodyVariants}
+                          initial="collapsed"
+                          animate="expanded"
+                          exit="collapsed"
+                        >
+                          <CardBodyInner>
+                            {entry.image && (
+                              <CompanyImg
+                                src={entry.image}
+                                alt={entry.subHeader}
+                                loading="lazy"
+                              />
+                            )}
+                            <Description>{entry.text}</Description>
+                            {entry.technologies && (
+                              <TechList>
+                                {entry.technologies.map((tech) => (
+                                  <TechChip key={tech}>{tech}</TechChip>
+                                ))}
+                              </TechList>
+                            )}
+                            {entry.link && (
+                              <LinkBtn
+                                href={entry.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Visit <ExternalLink />
+                              </LinkBtn>
+                            )}
+                            {entry.finalProjectScore && (
+                              <TechChip>
+                                Final Score: {entry.finalProjectScore}
+                              </TechChip>
+                            )}
+                          </CardBodyInner>
+                        </CardBody>
+                      )}
+                    </AnimatePresence>
+                  </Card>
+                </EntryWrapper>
+              ))}
+            </TimelineWrap>
+          </LayoutGroup>
+        </Container>
+      </motion.div>
     </Section>
   );
 }

@@ -1,21 +1,16 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence
-} from "framer-motion";
-import type { Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Github, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import useSectionParallax from "@hooks/useSectionParallax";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
 import projects from "@data/projects";
 
 const Section = styled.section.attrs({ className: "Projects" })`
   position: relative;
-  padding: ${theme.spacing["5xl"]} 0;
+  padding: ${theme.spacing["5xl"]} 0 400px;
   background: ${theme.colors.bg};
   overflow: hidden;
 `;
@@ -48,6 +43,10 @@ const Container = styled.div.attrs({ className: "ProjectsContainer" })`
 
   ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
+  `}
+
+  ${MaxWidth.sm`
+    padding: 0 ${theme.spacing.md};
   `}
 `;
 
@@ -83,8 +82,9 @@ const Grid = styled(motion.div).attrs({ className: "ProjectsGrid" })`
     grid-template-columns: repeat(2, 1fr);
   `}
 
-  ${MaxWidth.sm`
+  ${MaxWidth.md`
     grid-template-columns: 1fr;
+    gap: ${theme.spacing.lg};
   `}
 `;
 
@@ -343,45 +343,42 @@ function ProjectCardInner({ project }: ProjectCardInnerProps) {
 }
 
 function Projects() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  const { ref, bgY, contentY, contentOpacity } = useSectionParallax();
   const [inViewRef, inView] = useInView({ threshold: 0.08, triggerOnce: true });
 
   return (
     <Section ref={ref} id="projects">
       <ParallaxBg style={{ y: bgY }} />
-      <Container ref={inViewRef}>
-        <Header>
-          <SectionLabel
-            initial={{ opacity: 0, y: 10 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-          >
-            Projects
-          </SectionLabel>
-          <SectionTitle
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Things I've built
-          </SectionTitle>
-        </Header>
+      <motion.div style={{ y: contentY, opacity: contentOpacity }}>
+        <Container ref={inViewRef}>
+          <Header>
+            <SectionLabel
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+            >
+              Projects
+            </SectionLabel>
+            <SectionTitle
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              Things I've built
+            </SectionTitle>
+          </Header>
 
-        <Grid
-          variants={gridVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-        >
-          {projects.map((project) => (
-            <ProjectCardInner key={project.name} project={project} />
-          ))}
-        </Grid>
-      </Container>
+          <Grid
+            variants={gridVariants}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+          >
+            {projects.map((project) => (
+              <ProjectCardInner key={project.name} project={project} />
+            ))}
+          </Grid>
+        </Container>
+      </motion.div>
     </Section>
   );
 }
