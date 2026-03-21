@@ -313,17 +313,17 @@ function Experience() {
   const scrollToEntry = (i: number) => {
     const el = entryRefs.current[i];
     if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 80;
+    const top = el.getBoundingClientRect().top + window.scrollY - 100;
     window.scrollTo({ top, behavior: "smooth" });
   };
 
   const toggle = useCallback(
     (i: number) => {
       const next = openIndex === i ? null : i;
-      if (next !== null) {
-        scrollToEntry(next);
-      }
       setOpenIndex(next);
+      if (next !== null) {
+        setTimeout(() => scrollToEntry(next), 370);
+      }
     },
     [openIndex]
   );
