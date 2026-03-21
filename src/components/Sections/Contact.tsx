@@ -358,6 +358,12 @@ function Contact() {
   const { ref, bgY } = useSectionParallax();
   const [inViewRef, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
+  const waitAndClearMessage = () => {
+    setTimeout(() => {
+      setStatus("idle");
+    }, 4000);
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formRef.current) return;
@@ -373,10 +379,12 @@ function Contact() {
       .then(() => {
         setStatus("success");
         formRef.current?.reset();
+        waitAndClearMessage();
       })
       .catch((err) => {
         console.error({ err });
         setStatus("error");
+        waitAndClearMessage();
       });
   };
 
