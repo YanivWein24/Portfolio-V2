@@ -1,8 +1,8 @@
-import { useRef } from "react";
 import styled from "styled-components";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import useSectionParallax from "@hooks/useSectionParallax";
 import AnimatedNumbers from "react-animated-numbers";
 const AnimatedNumbersComponent =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,6 +43,10 @@ const Container = styled.div.attrs({ className: "AboutContainer" })`
   ${MaxWidth.md`
     padding: 0 ${theme.spacing.lg};
   `}
+
+  ${MaxWidth.sm`
+    padding: 0 ${theme.spacing.md};
+  `}
 `;
 
 const SectionLabel = styled(motion.span).attrs({ className: "SectionLabel" })`
@@ -72,6 +76,11 @@ const Grid = styled.div.attrs({ className: "AboutGrid" })`
 
   ${MaxWidth.lg`
     grid-template-columns: 1fr;
+    gap: ${theme.spacing["2xl"]};
+  `}
+
+  ${MaxWidth.sm`
+    gap: ${theme.spacing.xl};
   `}
 `;
 
@@ -126,6 +135,10 @@ const StatsCol = styled(motion.div).attrs({ className: "AboutStatsCol" })`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: ${theme.spacing.lg};
+
+  ${MaxWidth.xs`
+    grid-template-columns: 1fr;
+  `}
 `;
 
 const StatCard = styled(motion.div).attrs({ className: "StatCard" })`
@@ -232,13 +245,41 @@ const staggerCard: Variants = {
   })
 };
 
+interface StatCardWithRefProps {
+  index: number;
+  stat: { value: number; label: string };
+}
+
+function StatCardWithRef({ index, stat }: StatCardWithRefProps) {
+  const [ref, inView] = useInView({ threshold: 0.5, triggerOnce: true });
+  return (
+    <StatCard
+      ref={ref}
+      custom={index}
+      variants={staggerCard}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+    >
+      <StatNumber>
+        {inView && (
+          <AnimatedNumbersComponent
+            animateToNumber={stat.value}
+            useThousandsSeparator={false}
+            fontStyle={{
+              color: theme.colors.text.primary,
+              fontWeight: "800"
+            }}
+          />
+        )}
+        <Plus>+</Plus>
+      </StatNumber>
+      <StatLabel>{stat.label}</StatLabel>
+    </StatCard>
+  );
+}
+
 function About() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  const { ref, bgY } = useSectionParallax();
 
   const [inViewRef, inView] = useInView({ threshold: 0.15, triggerOnce: true });
 
@@ -288,28 +329,7 @@ function About() {
             animate={inView ? "visible" : "hidden"}
           >
             {Text.stats.map((stat, i) => (
-              <StatCard
-                key={stat.label}
-                custom={i}
-                variants={staggerCard}
-                initial="hidden"
-                animate={inView ? "visible" : "hidden"}
-              >
-                <StatNumber>
-                  {inView && (
-                    <AnimatedNumbersComponent
-                      animateToNumber={stat.value}
-                      useThousandsSeparator={false}
-                      fontStyle={{
-                        color: theme.colors.text.primary,
-                        fontWeight: "800"
-                      }}
-                    />
-                  )}
-                  <Plus>+</Plus>
-                </StatNumber>
-                <StatLabel>{stat.label}</StatLabel>
-              </StatCard>
+              <StatCardWithRef key={stat.label} index={i} stat={stat} />
             ))}
           </StatsCol>
         </Grid>
