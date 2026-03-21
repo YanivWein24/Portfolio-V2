@@ -11,10 +11,6 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.9",
-    "@mui/material": "^7.3.9",
     "@react-spring/parallax": "^10.0.3",
     "@react-spring/web": "^10.0.3",
     "framer-motion": "^12.38.0",
@@ -26,8 +22,7 @@
     "react-scroll": "^1.9.3",
     "react-type-animation": "^3.2.0",
     "styled-components": "^6.3.12",
-    "tslib": "^2.8.1",
-    "typewriter-effect": "^2.22.0"
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
