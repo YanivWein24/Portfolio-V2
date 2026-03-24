@@ -1,6 +1,4 @@
-import ThemeProvider from "./context/ThemeProvider";
-import PdfViewerProvider from "./context/PdfViewerProvider";
-import GlobalStyles from "@styles/GlobalStyles";
+import Providers from "./Providers";
 import Header from "@components/Layout/Header";
 import Hero from "@components/Sections/Hero";
 import About from "@components/Sections/About";
@@ -13,22 +11,19 @@ import PdfViewerModal from "@components/UI/PdfViewerModal";
 
 function App() {
   return (
-    <ThemeProvider>
-      <PdfViewerProvider>
-        <GlobalStyles />
-        <Header />
-        <main>
-          <Hero />
-          <About />
-          <Skills />
-          <Experience />
-          <Projects />
-          <Contact />
-        </main>
-        <Footer />
-        <PdfViewerModal />
-      </PdfViewerProvider>
-    </ThemeProvider>
+    <Providers>
+      <Header />
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Contact />
+      </main>
+      <Footer />
+      <PdfViewerModal />
+    </Providers>
   );
 }
 
