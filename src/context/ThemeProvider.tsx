@@ -7,7 +7,7 @@ const STORAGE_KEY = "portfolio-theme";
 function getInitialMode(): ThemeMode {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored === "dark" || stored === "light") return stored;
-  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  return "dark";
 }
 
 interface ThemeProviderProps {
@@ -21,17 +21,6 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
     document.documentElement.setAttribute("data-theme", mode);
     localStorage.setItem(STORAGE_KEY, mode);
   }, [mode]);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: light)");
-    const handler = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        setMode(e.matches ? "light" : "dark");
-      }
-    };
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   const toggleTheme = useCallback(() => {
     setMode((prev) => (prev === "dark" ? "light" : "dark"));
