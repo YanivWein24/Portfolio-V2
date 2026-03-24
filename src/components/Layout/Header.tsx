@@ -6,9 +6,9 @@ import { Github, Linkedin, Mail, Download, Eye, Sun, Moon } from "lucide-react";
 import type { NavLink } from "@appTypes/index";
 import useScrollY from "@hooks/useScrollY";
 import useTheme from "@hooks/useTheme";
+import usePdfViewer from "@hooks/usePdfViewer";
 import { ButtonLink } from "@components/UI/Button";
 import SocialIconBtn from "@components/UI/SocialIconBtn";
-import PdfViewerModal from "@components/UI/PdfViewerModal";
 import theme from "@styles/theme";
 import MaxWidth from "@styles/responsive";
 import Resume from "@assets/Yaniv-Resume.pdf";
@@ -305,10 +305,10 @@ const overlayVariants = {
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showPdfModal, setShowPdfModal] = useState(false);
   const scrollY = useScrollY();
   const scrolled = scrollY > 60;
   const { isDark, toggleTheme } = useTheme();
+  const { openPdfViewer } = usePdfViewer();
 
   const closeMenu = useCallback(() => setIsOpen(false), []);
 
@@ -368,7 +368,7 @@ function Header() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                setShowPdfModal(true);
+                openPdfViewer();
               }}
             >
               <Eye /> View CV
@@ -459,11 +459,6 @@ function Header() {
           </>
         )}
       </AnimatePresence>
-
-      <PdfViewerModal
-        isOpen={showPdfModal}
-        onClose={() => setShowPdfModal(false)}
-      />
     </>
   );
 }

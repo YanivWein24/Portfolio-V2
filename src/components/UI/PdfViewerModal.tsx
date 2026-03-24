@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Download } from "lucide-react";
+import usePdfViewer from "@hooks/usePdfViewer";
 import theme from "@styles/theme";
 import Resume from "@assets/Yaniv-Resume.pdf";
 
@@ -108,17 +109,9 @@ const DownloadBtn = styled.a.attrs({ className: "PdfDownloadBtn" })`
   }
 `;
 
-interface PdfViewerModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-}
+function PdfViewerModal() {
+  const { isOpen, closePdfViewer } = usePdfViewer();
 
-function PdfViewerModal({
-  isOpen,
-  onClose,
-  title = "Yaniv Weinshtein - Resume"
-}: PdfViewerModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -128,7 +121,7 @@ function PdfViewerModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={closePdfViewer}
           />
           <Modal
             key="pdf-modal"
@@ -138,8 +131,8 @@ function PdfViewerModal({
             transition={{ duration: 0.2 }}
           >
             <ModalHeader>
-              <h3>{title}</h3>
-              <CloseBtn onClick={onClose} aria-label="Close">
+              <h3>Yaniv Weinshtein - Resume</h3>
+              <CloseBtn onClick={closePdfViewer} aria-label="Close">
                 <X />
               </CloseBtn>
             </ModalHeader>

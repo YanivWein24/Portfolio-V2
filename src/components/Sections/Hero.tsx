@@ -5,9 +5,9 @@ import { useSpring, animated } from "@react-spring/web";
 import { Link } from "react-scroll";
 import { TypeAnimation } from "react-type-animation";
 import { ArrowDown, Github, Linkedin, Mail, Eye, Download } from "lucide-react";
+import usePdfViewer from "@hooks/usePdfViewer";
 import { Button, ButtonLink, ButtonScrollLink } from "@components/UI/Button";
 import SocialIconBtn from "@components/UI/SocialIconBtn";
-import PdfViewerModal from "@components/UI/PdfViewerModal";
 import Profile from "@assets/media/profile.jpg";
 import Resume from "@assets/Yaniv-Resume.pdf";
 import theme from "@styles/theme";
@@ -317,7 +317,7 @@ const imageVariants = {
 
 function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const [showPdf, setShowPdf] = useState(false);
+  const { openPdfViewer } = usePdfViewer();
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768
   );
@@ -423,11 +423,7 @@ function Hero() {
                   <Download /> Download CV
                 </ButtonLink>
               ) : (
-                <Button
-                  $variant="primary"
-                  $size="lg"
-                  onClick={() => setShowPdf(true)}
-                >
+                <Button $variant="primary" $size="lg" onClick={openPdfViewer}>
                   <Eye /> View CV
                 </Button>
               )}
@@ -466,8 +462,6 @@ function Hero() {
               </SocialIconBtn>
             </SocialRow>
           </Content>
-
-          <PdfViewerModal isOpen={showPdf} onClose={() => setShowPdf(false)} />
 
           <ImageSide
             variants={imageVariants}
