@@ -23,7 +23,7 @@ const Text = {
     contact: "Contact"
   },
   stats: [
-    { label: "Projects Shipped", value: 30 },
+    { label: "Projects Shipped", value: 20 },
     { label: "Components Built", value: 300 },
     { label: "API Endpoints", value: 100 },
     { label: "GitHub Contributions", value: 2500 }
